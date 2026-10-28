@@ -240,8 +240,8 @@ const AIRAC = "AIRAC AIP AMDT 04/26, effective 29 OCT 2026";
 // ----- FLAGGING -----
 // Flags go to a Google Form; responses are reviewed in the form's linked spreadsheet.
 // Until FLAG_URL is set, the Flag button stays hidden.
-const FLAG_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdwtBHpY6tVA8HdCJx24xJ2Kunr4uTIQP2A7-naKOsUR3CP8g/formResponse";
-const FLAG_FIELDS = { card: "entry.149031132", answer: "entry.1579255519", what: "entry.1929926160", fix: "entry.20272710", who: "entry.705567099", airac: "entry.159230901" };
+const FLAG_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdAlhIAKlvR-XlSOA0PjdIxiWqRdoz0LdfMnpm8pB_-KczgTg/formResponse";
+const FLAG_FIELDS = { card: "entry.1749472259", answer: "entry.962471277", what: "entry.648032319", fix: "entry.1583769371", who: "entry.930183847", airac: "entry.81139024" };
 let flag = { open: false, sent: new Set(), busy: false, error: "", draft: { what: "", fix: "", who: "" } };
 const esc = t => String(t).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
 const plain = html => html.replace(/<[^>]+>/g, "");
