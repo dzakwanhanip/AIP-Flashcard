@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 16</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 17</span>
   </footer>
 </div>
 
@@ -357,12 +357,14 @@ let known = new Set(saved.known || []);
 let deck = DECKS.includes(saved.deck) ? saved.deck : "All";
 let mode = saved.mode === "quiz" ? "quiz" : "study";
 let best = saved.best || {};
+// Per-deck pile of question ids not yet asked; a quiz deals from it so nothing repeats until every question has been used.
+let piles = saved.piles || {};
 let queue = [], current = null, flipped = false;
 let quiz = null;
 const QUIZ_LEN = 10;
 
 const id = c => c.part + "|" + c.q;
-const save = () => store.set({ known: [...known], deck, mode, best });
+const save = () => store.set({ known: [...known], deck, mode, best, piles });
 const shuffled = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
 // ----- QUIZ -----
@@ -385,8 +387,17 @@ function optionsFor(card) {
 }
 function startQuiz() {
   flag.open = false;
-  const inDeck = shuffled(CARDS.filter(c => deck === "All" || c.part === deck)).slice(0, QUIZ_LEN);
-  quiz = { cards: inDeck, i: 0, score: 0, picked: null, opts: optionsFor(inDeck[0]) };
+  const all = CARDS.filter(c => deck === "All" || c.part === deck);
+  const byId = new Map(all.map(c => [id(c), c]));
+  let pile = (piles[deck] || []).filter(k => byId.has(k));
+  const picked = [];
+  while (picked.length < Math.min(QUIZ_LEN, all.length)) {
+    if (!pile.length) pile = shuffled(all.map(id).filter(k => !picked.includes(k)));
+    picked.push(pile.shift());
+  }
+  piles[deck] = pile; save();
+  const inDeck = picked.map(k => byId.get(k));
+  quiz = { cards: inDeck, i: 0, score: 0, picked: null, opts: optionsFor(inDeck[0]), left: pile.length, total: all.length };
   renderQuiz();
 }
 function pick(n) {
@@ -410,6 +421,7 @@ function renderQuiz() {
       <div class="side">Quiz complete · ${deck}</div>
       <div class="score">${quiz.score} / ${total}</div>
       <p>${pct}% correct. Your best on this deck: ${best[deck]}%.</p>
+      <p class="sub">${quiz.left ? `${quiz.left} of ${quiz.total} questions in this deck still to come before any repeat.` : `You have now seen every question in this deck. The next quiz starts a fresh round.`}</p>
       <button class="btn go" id="againQuiz" type="button">New quiz</button></div></div>`;
     return;
   }
