@@ -96,6 +96,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .ver { white-space: nowrap; }
 .terms { display: block; margin-top: 6px; }
 .terms b { color: var(--ink); font-weight: 600; }
+.terms-q { margin: -6px 0 0; font-size: .82rem; color: var(--muted); }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -134,7 +135,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 12</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 13</span>
   </footer>
 </div>
 
@@ -307,17 +308,25 @@ const sourceNote = c => c.v
   : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.${termsNote(c)}`;
 // Abbreviations explained under each answer.
 const TERMS = {
-  // Only the less familiar ones; everyday terms (ATC, QNH, TMA, FIR, IAF, FAF...) are left out on purpose.
+  // Only the less familiar ones; everyday terms (ATC, QNH, TMA, FIR, FAF...) are left out on purpose.
   "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
   AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
-  GNSS: "Global Navigation Satellite System", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
+  GNSS: "Global Navigation Satellite System", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
   PBN: "Performance-Based Navigation", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
   TA: "Terminal Area", TCA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
+const termsIn = text => [...new Set(plain(text).match(TERM_RE) || [])];
+const termsHtml = list => list.map(k => `<b>${k}</b> ${TERMS[k]}`).join(" · ");
+// Terms in the question are shown with the question; the answer only adds new ones.
+function questionTerms(c) {
+  const list = termsIn(c.q);
+  return list.length ? `<p class="terms terms-q">${termsHtml(list)}</p>` : "";
+}
 function termsNote(c) {
-  const found = [...new Set((plain(c.q + " " + c.a)).match(TERM_RE) || [])];
-  return found.length ? `<span class="terms">${found.map(k => `<b>${k}</b> ${TERMS[k]}`).join(" · ")}</span>` : "";
+  const inQ = termsIn(c.q);
+  const list = termsIn(c.a).filter(k => !inQ.includes(k));
+  return list.length ? `<span class="terms">${termsHtml(list)}</span>` : "";
 }
 const DECKS = ["All", "GEN", "ENR", "AD"];
 const store = {
@@ -389,7 +398,7 @@ function renderQuiz() {
   area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content">
     <div class="qbar"><span>Question ${quiz.i + 1} of ${total}</span><span>Score ${quiz.score}</span></div>
     <div class="meta"><span>${c.part}</span><span class="ref">${c.ref}</span></div>
-    <p class="q">${c.q}</p>
+    <p class="q">${c.q}</p>${questionTerms(c)}
     <div class="opts">${quiz.opts.map((o, n) => {
       let cls = "opt";
       if (done && o === c.a) cls += " right";
@@ -440,7 +449,7 @@ function render() {
     <div class="bar"></div><div class="content">
       <div class="meta"><span>${current.part}</span><span class="ref">${current.ref}</span></div>
       <div class="side">${flipped ? "Answer" : "Question"}</div>
-      <p class="q">${current.q}</p>
+      <p class="q">${current.q}</p>${questionTerms(current)}
       ${flipped ? `<p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>${flagBlock(current)}`
                 : `<div class="hint">Tap the card or press Space to show the answer</div>`}
     </div></div>`;
