@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Malaysia AIP Flash Cards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column, a deck picker above a single flight-strip style card, answer buttons below */
+:root {
+  --bg: #e9edf1;
+  --surface: #ffffff;
+  --ink: #16202b;
+  --muted: #5b6876;
+  --line: #c9d1da;
+  --accent: #1f5f8b;
+  --strip: #f2c94c;
+  --good: #2e7d4f;
+  --again: #b4472f;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f151c; --surface: #18212b; --ink: #e6ebf0; --muted: #94a2b1; --line: #2c3946;
+  --accent: #6fb0de; --strip: #d9b23f; --good: #5fbf86; --again: #e27b62; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f151c; --surface: #18212b; --ink: #e6ebf0; --muted: #94a2b1; --line: #2c3946;
+  --accent: #6fb0de; --strip: #d9b23f; --good: #5fbf86; --again: #e27b62; color-scheme: dark }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 560px; margin: 0 auto; padding-block: 20px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 18px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-spacing: .01em; margin: 0; line-height: 1.1; text-wrap: balance; }
+.sub { color: var(--muted); font-size: .9rem; margin: 2px 0 0; }
+.stats { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.decks { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 6px 14px; border-radius: 4px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.chip:focus-visible, button:focus-visible, .card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+  min-height: 300px; display: grid; grid-template-columns: 14px 1fr; cursor: pointer; overflow: hidden;
+  box-shadow: 0 1px 0 var(--line); }
+.card .bar { background: var(--strip); }
+.card .content { padding: 18px 20px 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.meta { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+.ref { color: var(--accent); }
+.side { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .85rem; color: var(--muted); }
+.q { font-family: var(--display); font-weight: 600; font-size: 1.6rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.a { font-size: 1.1rem; margin: 0; white-space: pre-line; }
+.a code, .q code { font-family: var(--mono); font-size: .92em; }
+.hint { margin-top: auto; color: var(--muted); font-size: .85rem; }
+.verify { font-size: .8rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .05em; text-transform: uppercase;
+  padding: 12px; border-radius: 6px; border: 2px solid; background: var(--surface); cursor: pointer; }
+.btn.again { color: var(--again); border-color: var(--again); }
+.btn.good { color: var(--good); border-color: var(--good); }
+.btn:disabled { opacity: .4; cursor: default; }
+.tools { display: flex; gap: 16px; flex-wrap: wrap; font-size: .9rem; }
+.link { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.done { text-align: center; padding: 40px 20px; }
+.done h2 { font-family: var(--display); font-size: 1.6rem; margin: 0 0 6px; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.mode { font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: 10px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+.mode[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.mode:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.qbar { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { text-align: left; font: inherit; font-size: 1.05rem; padding: 12px 14px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); cursor: pointer; white-space: pre-line; }
+.opt code { font-family: var(--mono); }
+.opt:disabled { cursor: default; }
+.opt.right { border: 2px solid var(--good); color: var(--good); font-weight: 600; }
+.opt.wrong { border: 2px solid var(--again); color: var(--again); text-decoration: line-through; }
+.score { font-family: var(--display); font-weight: 700; font-size: 3.2rem; line-height: 1; margin: 6px 0; font-variant-numeric: tabular-nums; }
+.btn.go { color: var(--accent); border-color: var(--accent); width: 100%; }
+footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
+</style>
+<style>[hidden]{display:none!important} *,*::before,*::after{box-sizing:border-box} body{margin:0}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Malaysia AIP Flash Cards</h1>
+      <p class="sub">Study aid for air traffic controllers</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="modes" role="group" aria-label="Choose a mode">
+    <button class="mode" type="button" data-mode="study">Study</button>
+    <button class="mode" type="button" data-mode="quiz">Quiz</button>
+  </div>
+
+  <div class="decks" id="decks" role="group" aria-label="Choose a deck"></div>
+
+  <div id="quizArea" hidden></div>
+
+  <div id="cardArea"></div>
+
+  <div class="actions" id="actions">
+    <button class="btn again" id="againBtn" type="button">Again</button>
+    <button class="btn good" id="goodBtn" type="button">Got it</button>
+  </div>
+
+  <div class="tools">
+    <button class="link" id="shuffleBtn" type="button">Shuffle deck</button>
+    <button class="link" id="resetBtn" type="button">Reset my progress</button>
+  </div>
+
+  <footer>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use.
+  </footer>
+</div>
+
+<script>
+// ----- CARD LIST -----
+// To add a card, copy one line and change the text.
+// part: GEN, ENR or AD.  ref: the AIP section the answer comes from.
+const CARDS = [
+  { part: "GEN", ref: "GEN 0.1", q: "What are the three parts of the Malaysian AIP?", a: "GEN (General), ENR (En-route) and AD (Aerodromes)." },
+  { part: "GEN", ref: "GEN 0.1", q: "How often does the AIRAC cycle bring scheduled amendments into effect?", a: "Every 28 days, on common AIRAC effective dates." },
+  { part: "GEN", ref: "GEN 2.1", q: "What time system is used in Malaysian air traffic services and in the AIP?", a: "Coordinated Universal Time (UTC).\nLocal time in Malaysia is UTC +8, with no daylight saving." },
+  { part: "GEN", ref: "GEN 2.1", g: "unit", q: "Units used for altitudes, elevations and heights?", a: "Feet (ft)." },
+  { part: "GEN", ref: "GEN 2.1", g: "unit", q: "Units used for horizontal distances in navigation?", a: "Nautical miles (NM) and tenths." },
+  { part: "GEN", ref: "GEN 2.1", g: "unit", q: "Units used for airspeed and wind speed?", a: "Knots (kt)." },
+  { part: "GEN", ref: "GEN 2.1", g: "unit", q: "Unit used for altimeter settings (QNH/QFE)?", a: "Hectopascals (hPa)." },
+  { part: "GEN", ref: "GEN 1.1", q: "Which authority publishes the Malaysian AIP?", a: "The Civil Aviation Authority of Malaysia (CAAM)." },
+
+  // ENR cards: taken from AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). v: 1 marks a card checked against that issue.
+  { part: "ENR", v: 1, ref: "ENR 1.7.1.2", g: "alt", q: "Transition altitude in the Kuala Lumpur and Kota Kinabalu FIRs?", a: "11 000 ft" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.1.2", g: "fl", q: "Transition level in the Kuala Lumpur and Kota Kinabalu FIRs?", a: "FL130" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.1.3", g: "ft", q: "How deep is the transition layer?", a: "2 000 ft" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.2.1.9", q: "May an aircraft cruise within the transition layer?", a: "Only if specifically cleared by the ACC." },
+  { part: "ENR", v: 1, ref: "ENR 1.7.1.4", g: "levels", q: "Which levels may not be flight planned for cruise in the KL and KK FIRs?", a: "FL115, FL120 and FL125" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.2.1.6", q: "Altimeter setting at or above the transition level?", a: "1013.2 hPa" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.2.1.10", q: "Which QNH is given as the common QNH to traffic in the Kuala Lumpur TMA?", a: "The QNH of Kuala Lumpur International (Sepang)." },
+  { part: "ENR", v: 1, ref: "ENR 1.7.1.2", g: "alt", q: "Lowest safe altitude within 10 NM of Mt. Kinabalu?", a: "15 000 ft (lowest safe level FL170)" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.4.1", g: "sc", q: "IFR semicircular levels for magnetic tracks 000° to 179°?", a: "Odd levels: 3 000 to 11 000 ft, FL130 to FL410, then FL450" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.4.1", g: "sc", q: "IFR semicircular levels for magnetic tracks 180° to 359°?", a: "Even levels: 4 000 to 10 000 ft, FL140 to FL400, then FL430" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.4.2", g: "fl", q: "Which level is kept vacant as a buffer in uncontrolled airspace?", a: "FL250" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.5.1", q: "Which cruising level system applies below FL250 in uncontrolled airspace?", a: "The quadrantal system (Table C)." },
+  { part: "ENR", v: 1, ref: "ENR 1.7.7.1", g: "time", q: "Unless instructed otherwise, how soon must a level change start after an ATC instruction?", a: "Within 1 minute" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.7.1", g: "rate", q: "Pilots should tell ATC if their climb or descent rate will be less than what?", a: "500 ft/min" },
+  { part: "ENR", v: 1, ref: "ENR 1.7.7.4", g: "rate", q: "Maximum recommended vertical speed in RVSM airspace or in the last 2 000 ft before the cleared level?", a: "1 500 ft/min (ideally 500 to 1 000 ft/min)" },
+
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.2.1", g: "ssr", q: "SSR code for emergency?", a: "<code>7700</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.2.1", g: "ssr", q: "SSR code for radio communication failure?", a: "<code>7600</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.2.1", g: "ssr", q: "SSR code for unlawful interference?", a: "<code>7500</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.3.2", g: "ssr", q: "Which code does a transiting aircraft with no assigned code set before calling ATC?", a: "<code>A2000</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.3.3", g: "ssr", q: "Which two codes are never assigned because they are reserved for SSR site monitors?", a: "<code>0577</code> and <code>0757</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.1.1", q: "Transponder requirement for controlled airspace in the KL and KK FIRs?", a: "Mode A (4096 codes) and Mode C, operated together." },
+  { part: "ENR", v: 1, ref: "ENR 1.6.1.3.1", g: "nm", q: "Radar separation in the KL CTR/TMA, within 40 NM of the radar head, with PSR and SSR both working?", a: "3 NM" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.1.3.1", g: "nm", q: "Radar separation minimum in the Kota Kinabalu FIR?", a: "5 NM" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.2.1.4", g: "time", q: "Radio failure en route in IMC: how long does the aircraft keep its last speed and level after missing a compulsory reporting point?", a: "20 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.2.1.4", g: "time", q: "Radio failure in IMC: the aircraft should land within how long of the later of its ETA or last acknowledged EAT?", a: "30 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.2.4.1", g: "time", q: "Radio failure after an IFR departure in IMC: how long does the aircraft hold its last assigned level before climbing per the SID?", a: "3 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.2.4.3", g: "time", q: "Radio failure while radar vectored after departure: how long does the aircraft keep its last altitude and heading?", a: "2 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.2.7.1", q: "Radio failure in VMC by day around Subang: is KLIA a suitable aerodrome to land at?", a: "No. Land at Subang or another suitable aerodrome." },
+
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of the FIR between FL250 and FL460?", a: "Class A" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of ATS routes and TMAs between FL150 and FL250?", a: "Class A" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of ATS routes and TMAs between 10 000 ft and FL150?", a: "Class B" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of ATS routes and TMAs below 10 000 ft, and of CTRs and ATZs?", a: "Class C" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of uncontrolled airspace below FL250?", a: "Class G" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.2", g: "class", q: "Which ICAO airspace classes are not used in the KL and KK FIRs?", a: "Classes D, E and F" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.1.1.1", q: "How does Malaysian Class G airspace differ from the ICAO standard?", a: "Two-way radio communication is required." },
+  { part: "ENR", v: 1, ref: "ENR 1.4.2", q: "Who does the 250 kt IAS limit below 10 000 ft AMSL apply to?", a: "IFR in Class G, and VFR in Classes C and G." },
+  { part: "ENR", v: 1, ref: "ENR 1.4.2", g: "vmc", q: "VMC minima for VFR in Class C below 10 000 ft AMSL?", a: "5 km visibility; 1 500 m horizontal and 1 000 ft vertical from cloud" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.2", g: "vmc", q: "VMC minima for VFR in Class C at or above 10 000 ft AMSL?", a: "8 km visibility; 1 500 m horizontal and 1 000 ft vertical from cloud" },
+  { part: "ENR", v: 1, ref: "ENR 1.4.2", g: "vmc", q: "VMC minima for VFR in Class B below 10 000 ft AMSL?", a: "5 km visibility; clear of cloud" },
+
+  { part: "ENR", v: 1, ref: "ENR 1.1.2.13.3", g: "fl", q: "Above which level is VFR not allowed by day in controlled airspace?", a: "FL150" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.2.13.3", q: "When is VFR flight not allowed in any airspace?", a: "Between sunset and sunrise." },
+  { part: "ENR", v: 1, ref: "ENR 1.1.5.16.3", g: "vis", q: "Minimum ground visibility for Special VFR?", a: "1 500 m" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.5.8.1", g: "vis", q: "VFR take-offs, landings and circuit entry are suspended below which ceiling and visibility?", a: "Ceiling below 1 500 ft or ground visibility below 5 km" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.5.3.2", g: "wake", q: "Wake turbulence category HEAVY covers which maximum take-off mass?", a: "136 000 kg or more" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.5.3.2", g: "wake", q: "Wake turbulence category LIGHT covers which maximum take-off mass?", a: "7 000 kg or less" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.8.2", g: "hold", q: "Outbound leg of a standard holding pattern at or below FL140?", a: "1 minute" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.8.2", g: "hold", q: "Outbound leg of a standard holding pattern above FL140?", a: "1½ minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.2.1.2", g: "time", q: "A revised estimate must be passed to the ACC when it changes by how much?", a: "3 minutes or more" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.13.3.3", g: "time", q: "How long before entering the KL FIR should a data link aircraft log on?", a: "At least 10 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.1.7.3", q: "Outside VHF cover, how often are position reports and \"Operations Normal\" calls made?", a: "Position report every hour, with \"Operations Normal\" every 30 minutes in between." },
+  { part: "ENR", v: 1, ref: "ENR 1.1.3.4.2.1", g: "ft", q: "Class G traffic information broadcast: when collision is imminent, by how much should the aircraft climb or descend?", a: "500 ft" },
+
+  { part: "ENR", v: 1, ref: "ENR 1.8.3.1.1", g: "levels", q: "Vertical limits of RVSM airspace in the KL and KK FIRs?", a: "FL290 to FL410 inclusive" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.3.11.2", g: "ft", q: "Vertical separation between a non-RVSM aircraft in the RVSM stratum and other aircraft?", a: "2 000 ft" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.3.5.3", g: "ft", q: "During a level change in RVSM airspace, the aircraft should not overshoot or undershoot its cleared level by more than what?", a: "150 ft" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.3.9.3", g: "nm", q: "SLOP: how far, and which side, may an aircraft offset from the route centreline?", a: "1 or 2 NM right of centreline" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.3", g: "nm", q: "Longitudinal separation for RNP 4 or RNP 2 aircraft using ADS-C and CPDLC?", a: "30 NM" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.6", g: "time", q: "Time-based separation between aircraft on crossing tracks?", a: "15 minutes" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.4.4.2", g: "nm", q: "What deviation from the flight-plan track counts as a Large Lateral Deviation?", a: "15 NM or more" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.1.1.2", g: "nm", q: "Lateral separation between ATS routes over the South China Sea?", a: "60 NM" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.3.7.2.1", q: "Contingency without a revised clearance, able to hold level: what lateral and vertical offset does the aircraft take?", a: "Get 15 NM laterally from the assigned track, then climb or descend 500 ft." },
+
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Radar call sign of the Kuala Lumpur ACC?", a: "Lumpur Radar" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Call sign of the Kota Kinabalu ACC?", a: "Kinabalu Radar" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Call sign of the Johor Bahru TMA radar unit?", a: "Johor Radar" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "fl", q: "Upper limit of the Kuala Lumpur TMA sectors?", a: "FL245" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "fl", q: "Upper limit of the Kota Bharu TMA?", a: "FL140" },
+  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.2", q: "ICAO indicator used for Kuala Lumpur CPDLC log-on?", a: "<code>WMFC</code>" },
+
+  { part: "AD", ref: "AD 2 WMKK", g: "code", q: "ICAO location indicator for Kuala Lumpur International Airport (KLIA)?", a: "<code>WMKK</code>" },
+  { part: "AD", ref: "AD 2 WMKK", q: "List the runways at KLIA.", a: "14L/32R, 14R/32L and 15/33." },
+  { part: "AD", ref: "AD 2 WMSA", g: "code", q: "ICAO location indicator for Sultan Abdul Aziz Shah Airport, Subang?", a: "<code>WMSA</code>" },
+  { part: "AD", ref: "AD 2 WMKP", g: "code", q: "ICAO location indicator for Penang International Airport?", a: "<code>WMKP</code>" },
+  { part: "AD", ref: "AD 2 WMKL", g: "code", q: "ICAO location indicator for Langkawi International Airport?", a: "<code>WMKL</code>" },
+  { part: "AD", ref: "AD 2 WMKJ", g: "code", q: "ICAO location indicator for Senai International Airport (Johor Bahru)?", a: "<code>WMKJ</code>" },
+  { part: "AD", ref: "AD 2 WMKC", g: "code", q: "ICAO location indicator for Sultan Ismail Petra Airport, Kota Bharu?", a: "<code>WMKC</code>" },
+  { part: "AD", ref: "AD 2 WBKK", g: "code", q: "ICAO location indicator for Kota Kinabalu International Airport?", a: "<code>WBKK</code>" },
+  { part: "AD", ref: "AD 2 WBGG", g: "code", q: "ICAO location indicator for Kuching International Airport?", a: "<code>WBGG</code>" },
+  { part: "AD", ref: "AD 2 WBGR", g: "code", q: "ICAO location indicator for Miri Airport?", a: "<code>WBGR</code>" },
+  { part: "AD", ref: "AD 2 WBKL", g: "code", q: "ICAO location indicator for Labuan Airport?", a: "<code>WBKL</code>" },
+];
+
+// ----- APP -----
+const AIRAC = "AIRAC AIP AMDT 04/26, effective 29 OCT 2026";
+const sourceNote = c => c.v
+  ? `Source: AIP Malaysia ${c.ref} (${AIRAC}).`
+  : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.`;
+const DECKS = ["All", "GEN", "ENR", "AD"];
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem("aipfc") || "{}"); } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem("aipfc", JSON.stringify(v)); } catch (e) {} }
+};
+let saved = store.get();
+let known = new Set(saved.known || []);
+let deck = DECKS.includes(saved.deck) ? saved.deck : "All";
+let mode = saved.mode === "quiz" ? "quiz" : "study";
+let best = saved.best || {};
+let queue = [], current = null, flipped = false;
+let quiz = null;
+const QUIZ_LEN = 10;
+
+const id = c => c.part + "|" + c.q;
+const save = () => store.set({ known: [...known], deck, mode, best });
+const shuffled = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+// ----- QUIZ -----
+// Wrong options come from other cards of the same kind (g), then the same part.
+function optionsFor(card) {
+  const pool = [];
+  const add = list => list.forEach(c => { if (c.a !== card.a && !pool.includes(c.a)) pool.push(c.a); });
+  if (card.g) add(shuffled(CARDS.filter(c => c.g === card.g)));
+  add(shuffled(CARDS.filter(c => c.part === card.part)));
+  add(shuffled(CARDS));
+  return shuffled([card.a, ...pool.slice(0, 3)]);
+}
+function startQuiz() {
+  const inDeck = shuffled(CARDS.filter(c => deck === "All" || c.part === deck)).slice(0, QUIZ_LEN);
+  quiz = { cards: inDeck, i: 0, score: 0, picked: null, opts: optionsFor(inDeck[0]) };
+  renderQuiz();
+}
+function pick(n) {
+  if (!quiz || quiz.picked !== null || quiz.i >= quiz.cards.length) return;
+  quiz.picked = n;
+  if (quiz.opts[n] === quiz.cards[quiz.i].a) quiz.score++;
+  renderQuiz();
+}
+function nextQuestion() {
+  quiz.i++; quiz.picked = null;
+  if (quiz.i < quiz.cards.length) quiz.opts = optionsFor(quiz.cards[quiz.i]);
+  else { const pct = Math.round(100 * quiz.score / quiz.cards.length); if (!(best[deck] >= pct)) best[deck] = pct; save(); }
+  renderQuiz();
+}
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  const total = quiz.cards.length;
+  if (quiz.i >= total) {
+    const pct = Math.round(100 * quiz.score / total);
+    area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content done">
+      <div class="side">Quiz complete · ${deck}</div>
+      <div class="score">${quiz.score} / ${total}</div>
+      <p>${pct}% correct. Your best on this deck: ${best[deck]}%.</p>
+      <button class="btn go" id="againQuiz" type="button">New quiz</button></div></div>`;
+    return;
+  }
+  const c = quiz.cards[quiz.i], done = quiz.picked !== null;
+  area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content">
+    <div class="qbar"><span>Question ${quiz.i + 1} of ${total}</span><span>Score ${quiz.score}</span></div>
+    <div class="meta"><span>${c.part}</span><span class="ref">${c.ref}</span></div>
+    <p class="q">${c.q}</p>
+    <div class="opts">${quiz.opts.map((o, n) => {
+      let cls = "opt";
+      if (done && o === c.a) cls += " right";
+      else if (done && n === quiz.picked) cls += " wrong";
+      return `<button class="${cls}" type="button" data-opt="${n}" ${done ? "disabled" : ""}>${o}</button>`;
+    }).join("")}</div>
+    ${done ? `<div class="verify">${sourceNote(c)}</div>
+      <button class="btn go" id="nextQ" type="button">${quiz.i + 1 < total ? "Next question" : "See score"}</button>` : ""}
+  </div></div>`;
+}
+
+function showMode() {
+  document.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === mode));
+  const isQuiz = mode === "quiz";
+  document.getElementById("quizArea").hidden = !isQuiz;
+  document.getElementById("cardArea").hidden = isQuiz;
+  document.getElementById("actions").hidden = isQuiz;
+  document.getElementById("shuffleBtn").hidden = isQuiz;
+  document.getElementById("resetBtn").hidden = isQuiz;
+  if (isQuiz) { render(); startQuiz(); } else buildQueue(false);
+}
+
+function buildQueue(shuffle) {
+  queue = CARDS.filter(c => (deck === "All" || c.part === deck) && !known.has(id(c)));
+  if (shuffle) for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
+  next();
+}
+function next() { current = queue.shift() || null; flipped = false; render(); }
+
+function render() {
+  const inDeck = CARDS.filter(c => deck === "All" || c.part === deck);
+  const learned = inDeck.filter(c => known.has(id(c))).length;
+  document.getElementById("stats").textContent = learned + " / " + inDeck.length + " learned";
+
+  document.getElementById("decks").innerHTML = DECKS.map(d =>
+    `<button class="chip" type="button" data-deck="${d}" aria-pressed="${d === deck}">${d}</button>`).join("");
+
+  const area = document.getElementById("cardArea");
+  const again = document.getElementById("againBtn"), good = document.getElementById("goodBtn");
+  if (!current) {
+    area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content done">
+      <h2>Deck complete</h2><p>You have marked every card in this deck as learned. Pick another deck, or reset your progress to study them again.</p></div></div>`;
+    again.disabled = good.disabled = true;
+    return;
+  }
+  again.disabled = good.disabled = !flipped;
+  area.innerHTML = `<div class="card" id="card" tabindex="0" role="button" aria-label="Flash card. Tap to flip.">
+    <div class="bar"></div><div class="content">
+      <div class="meta"><span>${current.part}</span><span class="ref">${current.ref}</span></div>
+      <div class="side">${flipped ? "Answer" : "Question"}</div>
+      <p class="q">${current.q}</p>
+      ${flipped ? `<p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>`
+                : `<div class="hint">Tap the card or press Space to show the answer</div>`}
+    </div></div>`;
+}
+
+function flip() { if (current) { flipped = !flipped; render(); } }
+function answer(gotIt) {
+  if (!current || !flipped) return;
+  if (gotIt) known.add(id(current)); else queue.push(current);
+  save(); next();
+}
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest("[data-deck]");
+  if (chip) { deck = chip.dataset.deck; save(); if (mode === "quiz") { render(); startQuiz(); } else buildQueue(false); return; }
+  const m = e.target.closest("[data-mode]");
+  if (m) { mode = m.dataset.mode; save(); showMode(); return; }
+  const opt = e.target.closest("[data-opt]");
+  if (opt) { pick(+opt.dataset.opt); return; }
+  if (e.target.closest("#nextQ")) { nextQuestion(); return; }
+  if (e.target.closest("#againQuiz")) { startQuiz(); return; }
+  if (e.target.closest("#card")) flip();
+});
+document.getElementById("againBtn").onclick = () => answer(false);
+document.getElementById("goodBtn").onclick = () => answer(true);
+document.getElementById("shuffleBtn").onclick = () => buildQueue(true);
+document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(false); };
+document.addEventListener("keydown", e => {
+  if (e.target.closest && e.target.closest("button:not(#card)")) return;
+  if (mode === "quiz") {
+    if (quiz && quiz.picked === null && /^[1-4]$/.test(e.key)) pick(+e.key - 1);
+    else if (quiz && quiz.picked !== null && e.key === "Enter") nextQuestion();
+    return;
+  }
+  if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); }
+  else if (flipped && (e.key === "1" || e.key === "ArrowLeft")) answer(false);
+  else if (flipped && (e.key === "2" || e.key === "ArrowRight")) answer(true);
+});
+
+showMode();
+</script>
+</body>
+</html>
