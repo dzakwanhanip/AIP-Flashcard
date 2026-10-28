@@ -93,6 +93,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .flag-actions .btn.go { width: auto; padding: 8px 16px; font-size: 1rem; }
 .flag-ok { color: var(--good); margin: 0; }
 .flag-err { color: var(--again); margin: 0; }
+.ver { white-space: nowrap; }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -131,7 +132,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use.
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 3</span>
   </footer>
 </div>
 
@@ -285,6 +286,8 @@ async function handleFlag(action) {
 async function sendFlag(data) {
   const body = new URLSearchParams();
   for (const k in FLAG_FIELDS) body.append(FLAG_FIELDS[k], data[k] || "");
+  body.append("fvv", "1");
+  body.append("pageHistory", "0");
   // Google Forms does not allow reading the reply, so a request that goes through counts as sent.
   await fetch(FLAG_URL, { method: "POST", mode: "no-cors", body });
 }
