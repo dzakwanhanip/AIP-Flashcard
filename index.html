@@ -85,6 +85,14 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .opt.wrong { border: 2px solid var(--again); color: var(--again); text-decoration: line-through; }
 .score { font-family: var(--display); font-weight: 700; font-size: 3.2rem; line-height: 1; margin: 6px 0; font-variant-numeric: tabular-nums; }
 .btn.go { color: var(--accent); border-color: var(--accent); width: 100%; }
+.flagbox { display: flex; flex-direction: column; gap: 6px; font-size: .9rem; }
+.flag-link { color: var(--muted); font-size: .85rem; align-self: flex-start; }
+.flag-form label { font-weight: 600; }
+.flag-form textarea, .flag-form input { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); width: 100%; }
+.flag-actions { display: flex; align-items: center; gap: 16px; margin-top: 4px; }
+.flag-actions .btn.go { width: auto; padding: 8px 16px; font-size: 1rem; }
+.flag-ok { color: var(--good); margin: 0; }
+.flag-err { color: var(--again); margin: 0; }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -229,6 +237,58 @@ const CARDS = [
 
 // ----- APP -----
 const AIRAC = "AIRAC AIP AMDT 04/26, effective 29 OCT 2026";
+// ----- FLAGGING -----
+// Flags go to a Google Form; responses are reviewed in the form's linked spreadsheet.
+// Until FLAG_URL is set, the Flag button stays hidden.
+const FLAG_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdwtBHpY6tVA8HdCJx24xJ2Kunr4uTIQP2A7-naKOsUR3CP8g/formResponse";
+const FLAG_FIELDS = { card: "entry.149031132", answer: "entry.1579255519", what: "entry.1929926160", fix: "entry.20272710", who: "entry.705567099", airac: "entry.159230901" };
+let flag = { open: false, sent: new Set(), busy: false, error: "", draft: { what: "", fix: "", who: "" } };
+const esc = t => String(t).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+const plain = html => html.replace(/<[^>]+>/g, "");
+function flagBlock(c) {
+  if (!FLAG_URL) return "";
+  if (flag.sent.has(id(c))) return `<div class="flagbox"><p class="flag-ok">Thanks. Your flag has been sent for review.</p></div>`;
+  if (!flag.open) return `<div class="flagbox"><button class="link flag-link" type="button" data-flag="open">Flag this answer as wrong</button></div>`;
+  return `<div class="flagbox flag-form">
+    <label for="flagWhat">What is wrong with this card?</label>
+    <textarea id="flagWhat" rows="3" placeholder="e.g. The transition level changed in the latest AIRAC">${esc(flag.draft.what)}</textarea>
+    <label for="flagFix">Correct answer, if you know it</label>
+    <input id="flagFix" type="text" placeholder="Optional" value="${esc(flag.draft.fix)}">
+    <label for="flagWho">Your name or unit</label>
+    <input id="flagWho" type="text" placeholder="Optional" value="${esc(flag.draft.who)}">
+    ${flag.error ? `<p class="flag-err">${esc(flag.error)}</p>` : ""}
+    <div class="flag-actions">
+      <button class="btn go" type="button" data-flag="send" ${flag.busy ? "disabled" : ""}>${flag.busy ? "Sending…" : "Send flag"}</button>
+      <button class="link" type="button" data-flag="cancel">Cancel</button>
+    </div></div>`;
+}
+function rerender() { mode === "quiz" ? renderQuiz() : render(); }
+async function handleFlag(action) {
+  const c = mode === "quiz" ? quiz.cards[quiz.i] : current;
+  if (!c) return;
+  if (action === "open") { flag.open = true; flag.error = ""; rerender(); document.getElementById("flagWhat").focus(); return; }
+  if (action === "cancel") { flag.open = false; rerender(); return; }
+  const what = document.getElementById("flagWhat").value.trim();
+  const fix = document.getElementById("flagFix").value.trim();
+  const who = document.getElementById("flagWho").value.trim();
+  flag.draft = { what, fix, who };
+  if (!what) { flag.error = "Please describe what is wrong before sending."; rerender(); return; }
+  flag.busy = true; flag.error = ""; rerender();
+  try {
+    await sendFlag({ card: `${c.part} | ${c.ref} | ${c.q}`, answer: plain(c.a), what, fix, who, airac: c.v ? AIRAC : "unchecked sample" });
+    flag.sent.add(id(c)); flag.open = false; flag.draft = { what: "", fix: "", who };
+  } catch (err) {
+    flag.error = "The flag could not be sent. Check your connection and try again.";
+  }
+  flag.busy = false; rerender();
+}
+async function sendFlag(data) {
+  const body = new URLSearchParams();
+  for (const k in FLAG_FIELDS) body.append(FLAG_FIELDS[k], data[k] || "");
+  // Google Forms does not allow reading the reply, so a request that goes through counts as sent.
+  await fetch(FLAG_URL, { method: "POST", mode: "no-cors", body });
+}
+
 const sourceNote = c => c.v
   ? `Source: AIP Malaysia ${c.ref} (${AIRAC}).`
   : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.`;
@@ -261,6 +321,7 @@ function optionsFor(card) {
   return shuffled([card.a, ...pool.slice(0, 3)]);
 }
 function startQuiz() {
+  flag.open = false;
   const inDeck = shuffled(CARDS.filter(c => deck === "All" || c.part === deck)).slice(0, QUIZ_LEN);
   quiz = { cards: inDeck, i: 0, score: 0, picked: null, opts: optionsFor(inDeck[0]) };
   renderQuiz();
@@ -272,7 +333,7 @@ function pick(n) {
   renderQuiz();
 }
 function nextQuestion() {
-  quiz.i++; quiz.picked = null;
+  quiz.i++; quiz.picked = null; flag.open = false;
   if (quiz.i < quiz.cards.length) quiz.opts = optionsFor(quiz.cards[quiz.i]);
   else { const pct = Math.round(100 * quiz.score / quiz.cards.length); if (!(best[deck] >= pct)) best[deck] = pct; save(); }
   renderQuiz();
@@ -300,7 +361,7 @@ function renderQuiz() {
       else if (done && n === quiz.picked) cls += " wrong";
       return `<button class="${cls}" type="button" data-opt="${n}" ${done ? "disabled" : ""}>${o}</button>`;
     }).join("")}</div>
-    ${done ? `<div class="verify">${sourceNote(c)}</div>
+    ${done ? `<div class="verify">${sourceNote(c)}</div>${flagBlock(c)}
       <button class="btn go" id="nextQ" type="button">${quiz.i + 1 < total ? "Next question" : "See score"}</button>` : ""}
   </div></div>`;
 }
@@ -321,7 +382,7 @@ function buildQueue(shuffle) {
   if (shuffle) for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
   next();
 }
-function next() { current = queue.shift() || null; flipped = false; render(); }
+function next() { current = queue.shift() || null; flipped = false; flag.open = false; render(); }
 
 function render() {
   const inDeck = CARDS.filter(c => deck === "All" || c.part === deck);
@@ -345,7 +406,7 @@ function render() {
       <div class="meta"><span>${current.part}</span><span class="ref">${current.ref}</span></div>
       <div class="side">${flipped ? "Answer" : "Question"}</div>
       <p class="q">${current.q}</p>
-      ${flipped ? `<p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>`
+      ${flipped ? `<p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>${flagBlock(current)}`
                 : `<div class="hint">Tap the card or press Space to show the answer</div>`}
     </div></div>`;
 }
@@ -366,6 +427,11 @@ document.addEventListener("click", e => {
   if (opt) { pick(+opt.dataset.opt); return; }
   if (e.target.closest("#nextQ")) { nextQuestion(); return; }
   if (e.target.closest("#againQuiz")) { startQuiz(); return; }
+  if (e.target.closest(".flagbox")) {
+    const f = e.target.closest("[data-flag]");
+    if (f) handleFlag(f.dataset.flag);
+    return;
+  }
   if (e.target.closest("#card")) flip();
 });
 document.getElementById("againBtn").onclick = () => answer(false);
@@ -373,7 +439,7 @@ document.getElementById("goodBtn").onclick = () => answer(true);
 document.getElementById("shuffleBtn").onclick = () => buildQueue(true);
 document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(false); };
 document.addEventListener("keydown", e => {
-  if (e.target.closest && e.target.closest("button:not(#card)")) return;
+  if (e.target.closest && e.target.closest("button:not(#card), input, textarea")) return;
   if (mode === "quiz") {
     if (quiz && quiz.picked === null && /^[1-4]$/.test(e.key)) pick(+e.key - 1);
     else if (quiz && quiz.picked !== null && e.key === "Enter") nextQuestion();
