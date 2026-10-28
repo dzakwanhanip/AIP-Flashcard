@@ -132,7 +132,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 3</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 4</span>
   </footer>
 </div>
 
@@ -377,7 +377,7 @@ function showMode() {
   document.getElementById("actions").hidden = isQuiz;
   document.getElementById("shuffleBtn").hidden = isQuiz;
   document.getElementById("resetBtn").hidden = isQuiz;
-  if (isQuiz) { render(); startQuiz(); } else buildQueue(false);
+  if (isQuiz) { render(); startQuiz(); } else buildQueue(true);
 }
 
 function buildQueue(shuffle) {
@@ -423,7 +423,7 @@ function answer(gotIt) {
 
 document.addEventListener("click", e => {
   const chip = e.target.closest("[data-deck]");
-  if (chip) { deck = chip.dataset.deck; save(); if (mode === "quiz") { render(); startQuiz(); } else buildQueue(false); return; }
+  if (chip) { deck = chip.dataset.deck; save(); if (mode === "quiz") { render(); startQuiz(); } else buildQueue(true); return; }
   const m = e.target.closest("[data-mode]");
   if (m) { mode = m.dataset.mode; save(); showMode(); return; }
   const opt = e.target.closest("[data-opt]");
@@ -440,7 +440,7 @@ document.addEventListener("click", e => {
 document.getElementById("againBtn").onclick = () => answer(false);
 document.getElementById("goodBtn").onclick = () => answer(true);
 document.getElementById("shuffleBtn").onclick = () => buildQueue(true);
-document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(false); };
+document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(true); };
 document.addEventListener("keydown", e => {
   if (e.target.closest && e.target.closest("button:not(#card), input, textarea")) return;
   if (mode === "quiz") {
