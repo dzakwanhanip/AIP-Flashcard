@@ -22,7 +22,7 @@ Cards are in the `CARDS` list near the bottom of `index.html`. Each card looks l
 - `part`: GEN, ENR or AD (which deck it appears in)
 - `v: 1`: the card has been checked against the AIRAC issue named in `AIRAC` in the file
 - `ref`: the AIP paragraph the answer comes from
-- `w`: three believable wrong answers shown as quiz options
+- `w`: believable wrong answers; the quiz shows two of them plus one obviously wrong answer from another card
 - `g` (optional): a group name; only used for quiz wrong answers if a card has no `w`
 - `q` / `a`: question and answer
 

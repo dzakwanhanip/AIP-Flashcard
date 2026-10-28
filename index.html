@@ -134,7 +134,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 11</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 12</span>
   </footer>
 </div>
 
@@ -339,9 +339,15 @@ const shuffled = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 
 
 // ----- QUIZ -----
 // Wrong options come from other cards of the same kind (g), then the same part.
-// Wrong options are the card's own hand-written ones (w); other cards are only a fallback.
+// Each question gets two believable wrong options from the card's own list (w),
+// plus one obviously wrong option borrowed from an unrelated card.
 function optionsFor(card) {
-  if (card.w && card.w.length >= 3) return shuffled([card.a, ...shuffled(card.w).slice(0, 3)]);
+  if (card.w && card.w.length >= 2) {
+    const close = shuffled(card.w).slice(0, 2);
+    const odd = shuffled(CARDS.filter(c => c !== card && (!card.g || c.g !== card.g)))
+      .map(c => c.a).find(a => a !== card.a && !card.w.includes(a));
+    return shuffled([card.a, ...close, odd]);
+  }
   const pool = [];
   const add = list => list.forEach(c => { if (c.a !== card.a && !pool.includes(c.a)) pool.push(c.a); });
   if (card.g) add(shuffled(CARDS.filter(c => c.g === card.g)));
