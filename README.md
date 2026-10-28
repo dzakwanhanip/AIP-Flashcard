@@ -27,5 +27,5 @@ Cards are in the `CARDS` list near the bottom of `index.html`. Each card looks l
 
 ## Accuracy
 
-ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples.
+ENR cards (focused on the Kota Kinabalu FIR) are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples.
 Always refer to the current AIP. This is a study aid only, not for operational use.

@@ -132,7 +132,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 4</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 5</span>
   </footer>
 </div>
 
@@ -157,7 +157,6 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 1.7.2.1.9", q: "May an aircraft cruise within the transition layer?", a: "Only if specifically cleared by the ACC." },
   { part: "ENR", v: 1, ref: "ENR 1.7.1.4", g: "levels", q: "Which levels may not be flight planned for cruise in the KL and KK FIRs?", a: "FL115, FL120 and FL125" },
   { part: "ENR", v: 1, ref: "ENR 1.7.2.1.6", q: "Altimeter setting at or above the transition level?", a: "1013.2 hPa" },
-  { part: "ENR", v: 1, ref: "ENR 1.7.2.1.10", q: "Which QNH is given as the common QNH to traffic in the Kuala Lumpur TMA?", a: "The QNH of Kuala Lumpur International (Sepang)." },
   { part: "ENR", v: 1, ref: "ENR 1.7.1.2", g: "alt", q: "Lowest safe altitude within 10 NM of Mt. Kinabalu?", a: "15 000 ft (lowest safe level FL170)" },
   { part: "ENR", v: 1, ref: "ENR 1.7.4.1", g: "sc", q: "IFR semicircular levels for magnetic tracks 000° to 179°?", a: "Odd levels: 3 000 to 11 000 ft, FL130 to FL410, then FL450" },
   { part: "ENR", v: 1, ref: "ENR 1.7.4.1", g: "sc", q: "IFR semicircular levels for magnetic tracks 180° to 359°?", a: "Even levels: 4 000 to 10 000 ft, FL140 to FL400, then FL430" },
@@ -173,13 +172,11 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 1.6.3.3.2", g: "ssr", q: "Which code does a transiting aircraft with no assigned code set before calling ATC?", a: "<code>A2000</code>" },
   { part: "ENR", v: 1, ref: "ENR 1.6.3.3.3", g: "ssr", q: "Which two codes are never assigned because they are reserved for SSR site monitors?", a: "<code>0577</code> and <code>0757</code>" },
   { part: "ENR", v: 1, ref: "ENR 1.6.3.1.1", q: "Transponder requirement for controlled airspace in the KL and KK FIRs?", a: "Mode A (4096 codes) and Mode C, operated together." },
-  { part: "ENR", v: 1, ref: "ENR 1.6.1.3.1", g: "nm", q: "Radar separation in the KL CTR/TMA, within 40 NM of the radar head, with PSR and SSR both working?", a: "3 NM" },
   { part: "ENR", v: 1, ref: "ENR 1.6.1.3.1", g: "nm", q: "Radar separation minimum in the Kota Kinabalu FIR?", a: "5 NM" },
   { part: "ENR", v: 1, ref: "ENR 1.6.2.1.4", g: "time", q: "Radio failure en route in IMC: how long does the aircraft keep its last speed and level after missing a compulsory reporting point?", a: "20 minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.6.2.1.4", g: "time", q: "Radio failure in IMC: the aircraft should land within how long of the later of its ETA or last acknowledged EAT?", a: "30 minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.6.2.4.1", g: "time", q: "Radio failure after an IFR departure in IMC: how long does the aircraft hold its last assigned level before climbing per the SID?", a: "3 minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.6.2.4.3", g: "time", q: "Radio failure while radar vectored after departure: how long does the aircraft keep its last altitude and heading?", a: "2 minutes" },
-  { part: "ENR", v: 1, ref: "ENR 1.6.2.7.1", q: "Radio failure in VMC by day around Subang: is KLIA a suitable aerodrome to land at?", a: "No. Land at Subang or another suitable aerodrome." },
 
   { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of the FIR between FL250 and FL460?", a: "Class A" },
   { part: "ENR", v: 1, ref: "ENR 1.4.1.2", g: "class", q: "Airspace class of ATS routes and TMAs between FL150 and FL250?", a: "Class A" },
@@ -202,34 +199,27 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 1.1.8.2", g: "hold", q: "Outbound leg of a standard holding pattern at or below FL140?", a: "1 minute" },
   { part: "ENR", v: 1, ref: "ENR 1.1.8.2", g: "hold", q: "Outbound leg of a standard holding pattern above FL140?", a: "1½ minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.1.2.1.2", g: "time", q: "A revised estimate must be passed to the ACC when it changes by how much?", a: "3 minutes or more" },
-  { part: "ENR", v: 1, ref: "ENR 1.1.13.3.3", g: "time", q: "How long before entering the KL FIR should a data link aircraft log on?", a: "At least 10 minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.1.7.3", q: "Outside VHF cover, how often are position reports and \"Operations Normal\" calls made?", a: "Position report every hour, with \"Operations Normal\" every 30 minutes in between." },
   { part: "ENR", v: 1, ref: "ENR 1.1.3.4.2.1", g: "ft", q: "Class G traffic information broadcast: when collision is imminent, by how much should the aircraft climb or descend?", a: "500 ft" },
 
   { part: "ENR", v: 1, ref: "ENR 1.8.3.1.1", g: "levels", q: "Vertical limits of RVSM airspace in the KL and KK FIRs?", a: "FL290 to FL410 inclusive" },
   { part: "ENR", v: 1, ref: "ENR 1.8.3.11.2", g: "ft", q: "Vertical separation between a non-RVSM aircraft in the RVSM stratum and other aircraft?", a: "2 000 ft" },
   { part: "ENR", v: 1, ref: "ENR 1.8.3.5.3", g: "ft", q: "During a level change in RVSM airspace, the aircraft should not overshoot or undershoot its cleared level by more than what?", a: "150 ft" },
-  { part: "ENR", v: 1, ref: "ENR 1.8.3.9.3", g: "nm", q: "SLOP: how far, and which side, may an aircraft offset from the route centreline?", a: "1 or 2 NM right of centreline" },
-  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.3", g: "nm", q: "Longitudinal separation for RNP 4 or RNP 2 aircraft using ADS-C and CPDLC?", a: "30 NM" },
-  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.6", g: "time", q: "Time-based separation between aircraft on crossing tracks?", a: "15 minutes" },
   { part: "ENR", v: 1, ref: "ENR 1.8.4.4.2", g: "nm", q: "What deviation from the flight-plan track counts as a Large Lateral Deviation?", a: "15 NM or more" },
   { part: "ENR", v: 1, ref: "ENR 1.8.1.1.2", g: "nm", q: "Lateral separation between ATS routes over the South China Sea?", a: "60 NM" },
   { part: "ENR", v: 1, ref: "ENR 1.8.3.7.2.1", q: "Contingency without a revised clearance, able to hold level: what lateral and vertical offset does the aircraft take?", a: "Get 15 NM laterally from the assigned track, then climb or descend 500 ft." },
 
-  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Radar call sign of the Kuala Lumpur ACC?", a: "Lumpur Radar" },
   { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Call sign of the Kota Kinabalu ACC?", a: "Kinabalu Radar" },
-  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Call sign of the Johor Bahru TMA radar unit?", a: "Johor Radar" },
-  { part: "ENR", v: 1, ref: "ENR 2.1", g: "fl", q: "Upper limit of the Kuala Lumpur TMA sectors?", a: "FL245" },
-  { part: "ENR", v: 1, ref: "ENR 2.1", g: "fl", q: "Upper limit of the Kota Bharu TMA?", a: "FL140" },
-  { part: "ENR", v: 1, ref: "ENR 1.8.4.2.2", q: "ICAO indicator used for Kuala Lumpur CPDLC log-on?", a: "<code>WMFC</code>" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "call", q: "Call sign of the Kuching ACC flight information service?", a: "Kuching Information" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Kota Kinabalu Terminal Area?", a: "FL245 / 3 000 ft ALT" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Kuching Terminal Area?", a: "FL245 / 2 500 ft ALT" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Miri TMA?", a: "FL145 / 2 500 ft ALT" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Sibu TMA?", a: "11 500 ft ALT / 2 500 ft ALT" },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Brunei TCA?", a: "FL145 / 3 000 ft ALT" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code blocks for international departures in the Kota Kinabalu FIR?", a: "<code>2001</code>–<code>2077</code> and <code>0400</code>–<code>0477</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code blocks for domestic flights in the Kota Kinabalu FIR?", a: "<code>0500</code>–<code>0577</code>, <code>3100</code>–<code>3177</code> and <code>5200</code>–<code>5277</code>" },
+  { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code block allocated to Brunei in the Kota Kinabalu FIR?", a: "<code>7300</code>–<code>7377</code>" },
 
-  { part: "AD", ref: "AD 2 WMKK", g: "code", q: "ICAO location indicator for Kuala Lumpur International Airport (KLIA)?", a: "<code>WMKK</code>" },
-  { part: "AD", ref: "AD 2 WMKK", q: "List the runways at KLIA.", a: "14L/32R, 14R/32L and 15/33." },
-  { part: "AD", ref: "AD 2 WMSA", g: "code", q: "ICAO location indicator for Sultan Abdul Aziz Shah Airport, Subang?", a: "<code>WMSA</code>" },
-  { part: "AD", ref: "AD 2 WMKP", g: "code", q: "ICAO location indicator for Penang International Airport?", a: "<code>WMKP</code>" },
-  { part: "AD", ref: "AD 2 WMKL", g: "code", q: "ICAO location indicator for Langkawi International Airport?", a: "<code>WMKL</code>" },
-  { part: "AD", ref: "AD 2 WMKJ", g: "code", q: "ICAO location indicator for Senai International Airport (Johor Bahru)?", a: "<code>WMKJ</code>" },
-  { part: "AD", ref: "AD 2 WMKC", g: "code", q: "ICAO location indicator for Sultan Ismail Petra Airport, Kota Bharu?", a: "<code>WMKC</code>" },
   { part: "AD", ref: "AD 2 WBKK", g: "code", q: "ICAO location indicator for Kota Kinabalu International Airport?", a: "<code>WBKK</code>" },
   { part: "AD", ref: "AD 2 WBGG", g: "code", q: "ICAO location indicator for Kuching International Airport?", a: "<code>WBGG</code>" },
   { part: "AD", ref: "AD 2 WBGR", g: "code", q: "ICAO location indicator for Miri Airport?", a: "<code>WBGR</code>" },
