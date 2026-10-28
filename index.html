@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 15</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 16</span>
   </footer>
 </div>
 
@@ -230,21 +230,21 @@ const CARDS = [
   { part: "AD", v: 1, ref: "WBKK AD 2.3", q: "Kota Kinabalu (WBKK): when is RWY 02/20 closed every week for maintenance?", a: "Every Tuesday and Wednesday, 1845–2115 UTC", w: ["Every Monday and Tuesday, 1845–2115 UTC", "Every Tuesday and Wednesday, 1645–1915 UTC", "Every Wednesday and Thursday, 1845–2115 UTC"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.8", q: "Kota Kinabalu (WBKK): what restriction applies to Taxiway F?", a: "Available for day operations only.", w: ["Closed to aircraft larger than Code C.", "Available for night operations only.", "One-way taxiing only, northbound."] },
   // ATS hours of operation from each aerodrome's AD 2.3 (AIRAC AIP AMDT 04/26).
-  { part: "AD", v: 1, ref: "WBKK AD 2.3", g: "hours", q: "Kota Kinabalu (WBKK): ATS hours of operation?", a: "H24", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1500 UTC daily (0700–2300 local)", "2100–1600 UTC daily (0500–0000 local)"] },
-  { part: "AD", v: 1, ref: "WBKS AD 2.3", g: "hours", q: "Sandakan (WBKS): ATS hours of operation?", a: "2300–1400 UTC daily (0700–2200 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1300 UTC daily (0700–2100 local)", "H24"] },
-  { part: "AD", v: 1, ref: "WBKW AD 2.3", g: "hours", q: "Tawau (WBKW): ATS hours of operation?", a: "2300–1400 UTC daily (0700–2200 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1530 UTC daily (0700–2330 local)", "HJ"] },
-  { part: "AD", v: 1, ref: "WBKL AD 2.3", g: "hours", q: "Labuan (WBKL): ATS hours of operation?", a: "2200–1400 UTC daily (0600–2200 local)", w: ["2300–1400 UTC daily (0700–2200 local)", "2200–1230 UTC daily (0600–2030 local)", "H24"] },
-  { part: "AD", v: 1, ref: "WBKD AD 2.3", g: "hours", q: "Lahad Datu (WBKD): ATS hours of operation?", a: "HJ", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–1400 UTC daily (0700–2200 local)", "NIL (no ATS)"] },
-  { part: "AD", v: 1, ref: "WBGG AD 2.3", g: "hours", q: "Kuching (WBGG): ATS hours of operation?", a: "H24", w: ["2200–1530 UTC daily (0600–2330 local)", "2200–1400 UTC daily (0600–2200 local)", "2100–1600 UTC daily (0500–0000 local)"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.3", g: "hours", q: "Kota Kinabalu (WBKK): ATS hours of operation?", a: "24 hours", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1500 UTC daily (0700–2300 local)", "2100–1600 UTC daily (0500–0000 local)"] },
+  { part: "AD", v: 1, ref: "WBKS AD 2.3", g: "hours", q: "Sandakan (WBKS): ATS hours of operation?", a: "2300–1400 UTC daily (0700–2200 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1300 UTC daily (0700–2100 local)", "24 hours"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.3", g: "hours", q: "Tawau (WBKW): ATS hours of operation?", a: "2300–1400 UTC daily (0700–2200 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1530 UTC daily (0700–2330 local)", "Sunrise to sunset"] },
+  { part: "AD", v: 1, ref: "WBKL AD 2.3", g: "hours", q: "Labuan (WBKL): ATS hours of operation?", a: "2200–1400 UTC daily (0600–2200 local)", w: ["2300–1400 UTC daily (0700–2200 local)", "2200–1230 UTC daily (0600–2030 local)", "24 hours"] },
+  { part: "AD", v: 1, ref: "WBKD AD 2.3", g: "hours", q: "Lahad Datu (WBKD): ATS hours of operation?", a: "Sunrise to sunset", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–1400 UTC daily (0700–2200 local)", "NIL (no ATS)"] },
+  { part: "AD", v: 1, ref: "WBGG AD 2.3", g: "hours", q: "Kuching (WBGG): ATS hours of operation?", a: "24 hours", w: ["2200–1530 UTC daily (0600–2330 local)", "2200–1400 UTC daily (0600–2200 local)", "2100–1600 UTC daily (0500–0000 local)"] },
   { part: "AD", v: 1, ref: "WBGS AD 2.3", g: "hours", q: "Sibu (WBGS): ATS hours of operation?", a: "2200–1400 UTC daily (0600–2200 local)", w: ["2200–1300 UTC daily (0600–2100 local)", "2300–1400 UTC daily (0700–2200 local)", "2200–1530 UTC daily (0600–2330 local)"] },
-  { part: "AD", v: 1, ref: "WBGB AD 2.3", g: "hours", q: "Bintulu (WBGB): ATS hours of operation?", a: "2200–1300 UTC daily (0600–2100 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1300 UTC daily (0700–2100 local)", "HJ"] },
-  { part: "AD", v: 1, ref: "WBGR AD 2.3", g: "hours", q: "Miri (WBGR): ATS hours of operation?", a: "2200–1530 UTC daily (0600–2330 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2200–1300 UTC daily (0600–2100 local)", "H24"] },
-  { part: "AD", v: 1, ref: "WBGJ AD 2.3", g: "hours", q: "Limbang (WBGJ): ATS hours of operation?", a: "2300–0900 UTC daily (0700–1700 local)", w: ["0000–0900 UTC daily (0800–1700 local)", "2230–1030 UTC daily (0630–1830 local)", "HJ"] },
-  { part: "AD", v: 1, ref: "WBGM AD 2.3", g: "hours", q: "Marudi (WBGM): ATS hours of operation?", a: "HJ", w: ["2300–0900 UTC daily (0700–1700 local)", "0000–0900 UTC daily (0800–1700 local)", "NIL (no ATS)"] },
-  { part: "AD", v: 1, ref: "WBGW AD 2.3", g: "hours", q: "Lawas (WBGW): ATS hours of operation?", a: "HJ", w: ["2300–0900 UTC daily (0700–1700 local)", "2200–1300 UTC daily (0600–2100 local)", "NIL (no ATS)"] },
-  { part: "AD", v: 1, ref: "WBMU AD 2.3", g: "hours", q: "Mulu (WBMU): ATS hours of operation?", a: "HJ", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–1400 UTC daily (0700–2200 local)", "NIL (no ATS)"] },
-  { part: "AD", v: 1, ref: "WBGK AD 2.3", g: "hours", q: "Mukah (WBGK): ATS hours of operation?", a: "HJ", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–0900 UTC daily (0700–1700 local)", "NIL (no ATS)"] },
-  { part: "AD", v: 1, ref: "AD 2.3 (WBKT, WBTM)", g: "hours", q: "Kudat (WBKT) and Tanjung Manis (WBTM): what ATS hours are published?", a: "NIL. No ATS is provided.", w: ["HJ at both", "0000–0900 UTC daily at both", "HJ at Kudat, NIL at Tanjung Manis"] },
+  { part: "AD", v: 1, ref: "WBGB AD 2.3", g: "hours", q: "Bintulu (WBGB): ATS hours of operation?", a: "2200–1300 UTC daily (0600–2100 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2300–1300 UTC daily (0700–2100 local)", "Sunrise to sunset"] },
+  { part: "AD", v: 1, ref: "WBGR AD 2.3", g: "hours", q: "Miri (WBGR): ATS hours of operation?", a: "2200–1530 UTC daily (0600–2330 local)", w: ["2200–1400 UTC daily (0600–2200 local)", "2200–1300 UTC daily (0600–2100 local)", "24 hours"] },
+  { part: "AD", v: 1, ref: "WBGJ AD 2.3", g: "hours", q: "Limbang (WBGJ): ATS hours of operation?", a: "2300–0900 UTC daily (0700–1700 local)", w: ["0000–0900 UTC daily (0800–1700 local)", "2230–1030 UTC daily (0630–1830 local)", "Sunrise to sunset"] },
+  { part: "AD", v: 1, ref: "WBGM AD 2.3", g: "hours", q: "Marudi (WBGM): ATS hours of operation?", a: "Sunrise to sunset", w: ["2300–0900 UTC daily (0700–1700 local)", "0000–0900 UTC daily (0800–1700 local)", "NIL (no ATS)"] },
+  { part: "AD", v: 1, ref: "WBGW AD 2.3", g: "hours", q: "Lawas (WBGW): ATS hours of operation?", a: "Sunrise to sunset", w: ["2300–0900 UTC daily (0700–1700 local)", "2200–1300 UTC daily (0600–2100 local)", "NIL (no ATS)"] },
+  { part: "AD", v: 1, ref: "WBMU AD 2.3", g: "hours", q: "Mulu (WBMU): ATS hours of operation?", a: "Sunrise to sunset", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–1400 UTC daily (0700–2200 local)", "NIL (no ATS)"] },
+  { part: "AD", v: 1, ref: "WBGK AD 2.3", g: "hours", q: "Mukah (WBGK): ATS hours of operation?", a: "Sunrise to sunset", w: ["0000–0900 UTC daily (0800–1700 local)", "2300–0900 UTC daily (0700–1700 local)", "NIL (no ATS)"] },
+  { part: "AD", v: 1, ref: "AD 2.3 (WBKT, WBTM)", g: "hours", q: "Kudat (WBKT) and Tanjung Manis (WBTM): what ATS hours are published?", a: "NIL. No ATS is provided.", w: ["Sunrise to sunset at both", "0000–0900 UTC daily at both", "Sunrise to sunset at Kudat, NIL at Tanjung Manis"] },
   { part: "AD", v: 1, ref: "WBKL AD 2.3", q: "Labuan (WBKL): when is circuit flying not allowed every week?", a: "Every Friday, 0430–0530 UTC", w: ["Every Friday, 0500–0600 UTC", "Every Thursday, 0430–0530 UTC", "Every Sunday, 0430–0530 UTC"] },
   { part: "AD", v: 1, ref: "WBKS AD 2.3", q: "Sandakan (WBKS): unscheduled movements need PPR from whom, and by when?", a: "ATCC Kota Kinabalu, before 1300 UTC", w: ["Sandakan Tower, before 1300 UTC", "ATCC Kota Kinabalu, before 0400 UTC", "FIC Kota Kinabalu, 24 hours in advance"] },
   { part: "AD", v: 1, ref: "WBGR AD 2.3", q: "Miri (WBGR): unscheduled movements need PPR from whom, and by when?", a: "FIC Kota Kinabalu, before 0400 UTC daily", w: ["ATCC Kota Kinabalu, before 1300 UTC daily", "Miri Tower, before 0400 UTC daily", "FIC Kota Kinabalu, 48 hours in advance"] },
@@ -330,7 +330,7 @@ const TERMS = {
   // Only the less familiar ones; everyday terms (ATC, QNH, TMA, FIR, FAF...) are left out on purpose.
   "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
   AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
-  GNSS: "Global Navigation Satellite System", HJ: "Sunrise to sunset", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
+  GNSS: "Global Navigation Satellite System", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
   PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
   TA: "Terminal Area", TCA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle"
 };
