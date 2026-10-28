@@ -16,13 +16,14 @@ The whole app is one file, `index.html`. It runs in any browser on phones and co
 Cards are in the `CARDS` list near the bottom of `index.html`. Each card looks like this:
 
 ```js
-{ part: "ENR", v: 1, ref: "ENR 1.7.1.2", g: "alt", q: "Transition altitude?", a: "11 000 ft" },
+{ part: "ENR", v: 1, ref: "ENR 1.7.1.2", q: "Transition altitude?", a: "11 000 ft", w: ["13 000 ft", "10 000 ft", "11 500 ft"] },
 ```
 
 - `part`: GEN, ENR or AD (which deck it appears in)
 - `v: 1`: the card has been checked against the AIRAC issue named in `AIRAC` in the file
 - `ref`: the AIP paragraph the answer comes from
-- `g` (optional): a group name; quiz wrong answers are picked from cards in the same group
+- `w`: three believable wrong answers shown as quiz options
+- `g` (optional): a group name; only used for quiz wrong answers if a card has no `w`
 - `q` / `a`: question and answer
 
 ## Accuracy
