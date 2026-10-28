@@ -134,7 +134,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 6</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 7</span>
   </footer>
 </div>
 
@@ -305,17 +305,12 @@ const sourceNote = c => c.v
   : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.${termsNote(c)}`;
 // Abbreviations explained under each answer.
 const TERMS = {
-  ACC: "Area Control Centre", ADS: "Automatic Dependent Surveillance", "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
-  AIP: "Aeronautical Information Publication", AIRAC: "Aeronautical Information Regulation and Control", ALT: "Altitude", AMSL: "Above Mean Sea Level",
-  APP: "Approach", AR: "Authorisation Required", ATC: "Air Traffic Control", ATIS: "Automatic Terminal Information Service", ATS: "Air Traffic Services", ATZ: "Aerodrome Traffic Zone",
-  CPDLC: "Controller–Pilot Data Link Communications", CTR: "Control Zone", EAT: "Expected Approach Time", ETA: "Estimated Time of Arrival",
-  FAF: "Final Approach Fix", FIR: "Flight Information Region", FL: "Flight Level", GND: "Ground", GNSS: "Global Navigation Satellite System",
-  IAF: "Initial Approach Fix", IAS: "Indicated Airspeed", ICAO: "International Civil Aviation Organization", IF: "Intermediate Fix", IFR: "Instrument Flight Rules", IMC: "Instrument Meteorological Conditions",
-  KIAS: "Knots Indicated Airspeed", MHz: "Megahertz", NM: "Nautical Miles", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
-  PAPI: "Precision Approach Path Indicator", PBN: "Performance-Based Navigation", PSR: "Primary Surveillance Radar", QFE: "Altimeter setting that reads height above the aerodrome",
-  QNH: "Altimeter setting that reads altitude above mean sea level", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNAV: "Area Navigation", RNP: "Required Navigation Performance",
-  RVSM: "Reduced Vertical Separation Minimum", RWY: "Runway", SSR: "Secondary Surveillance Radar", TA: "Terminal Area", TCA: "Terminal Control Area", THR: "Threshold",
-  TMA: "Terminal Control Area", TWR: "Tower", UTC: "Coordinated Universal Time", VFR: "Visual Flight Rules", VHF: "Very High Frequency", VMC: "Visual Meteorological Conditions", VPA: "Vertical Path Angle"
+  // Only the less familiar ones; everyday terms (ATC, QNH, TMA, FIR, IAF, FAF...) are left out on purpose.
+  "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
+  AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
+  GNSS: "Global Navigation Satellite System", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
+  PBN: "Performance-Based Navigation", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
+  TA: "Terminal Area", TCA: "Terminal Control Area", VPA: "Vertical Path Angle"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
 function termsNote(c) {
