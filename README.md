@@ -2,7 +2,7 @@
 
 A study and quiz web app for air traffic controllers, built from the public Malaysian AIP (https://aip.caam.gov.my).
 
-Live site: https://dzakwanhanip.github.io/aip-flashcard/
+Live site: https://dzakwanhanip.github.io/AIP-Flashcard/
 
 ## How it works
 
