@@ -94,6 +94,8 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .flag-ok { color: var(--good); margin: 0; }
 .flag-err { color: var(--again); margin: 0; }
 .ver { white-space: nowrap; }
+.terms { display: block; margin-top: 6px; }
+.terms b { color: var(--ink); font-weight: 600; }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -132,7 +134,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 5</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 6</span>
   </footer>
 </div>
 
@@ -224,6 +226,22 @@ const CARDS = [
   { part: "AD", ref: "AD 2 WBGG", g: "code", q: "ICAO location indicator for Kuching International Airport?", a: "<code>WBGG</code>" },
   { part: "AD", ref: "AD 2 WBGR", g: "code", q: "ICAO location indicator for Miri Airport?", a: "<code>WBGR</code>" },
   { part: "AD", ref: "AD 2 WBKL", g: "code", q: "ICAO location indicator for Labuan Airport?", a: "<code>WBKL</code>" },
+  // Kota Kinabalu RNP Z RWY 20 (AR): read from chart AD 2-WBKK-8-27 dated 01 DEC 2022, as published in the current eAIP.
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "fix", q: "RNP Z RWY 20 (AR) at Kota Kinabalu: which fixes are the IAFs?", a: "SABNU, KK688, DUMUB and KK660" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "fix", q: "RNP Z RWY 20 (AR): which fixes are the IFs, and at what altitudes?", a: "KK658 at 2 100 ft and KK642 at 2 400 ft" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "fix", q: "RNP Z RWY 20 (AR): which fix is the FAF, and at what altitude?", a: "KK630 at 1 000 ft, 3.1 NM from THR 20" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): what are the VPA and the RDH?", a: "VPA 2.8°, RDH 55 ft" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): what is the missed approach procedure?", a: "Climb to 4 000 ft via the RNP missed approach track to KK688, or as directed by ATC." },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "ft", q: "RNP Z RWY 20 (AR): OCA (OCH) for Category C and D aircraft?", a: "705 ft (695 ft), RNP 0.3" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): are circling and alternate minima published?", a: "No. Circling and alternate are N/A." },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): at what aerodrome temperatures is the approach not authorised?", a: "Below 17°C or above 40°C" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): which three requirements are listed in the chart notes?", a: "Authorisation required, GNSS required and RF required." },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): which RNP value is required from the IAFs to the FAF?", a: "RNP 0.3" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): what speed restriction applies approaching KK642 and KK550?", a: "At or below 225 KIAS" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "RNP Z RWY 20 (AR): do the PAPI and the vertical path angle coincide?", a: "No. The chart notes they are not coincident." },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "Kota Kinabalu: aerodrome elevation and THR RWY 20 elevation?", a: "Aerodrome 14 ft, THR RWY 20 11 ft" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "freq", q: "Kota Kinabalu: APP and TWR frequencies?", a: "APP 119.1 MHz, TWR 118.3 MHz" },
+  { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "freq", q: "Kota Kinabalu: GND and ATIS frequencies?", a: "GND 121.6 MHz, ATIS 127.4 MHz" },
 ];
 
 // ----- APP -----
@@ -283,8 +301,27 @@ async function sendFlag(data) {
 }
 
 const sourceNote = c => c.v
-  ? `Source: AIP Malaysia ${c.ref} (${AIRAC}).`
-  : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.`;
+  ? `Source: AIP Malaysia ${c.ref} (${AIRAC}).${termsNote(c)}`
+  : `Sample card, not yet checked. See AIP Malaysia ${c.ref}.${termsNote(c)}`;
+// Abbreviations explained under each answer.
+const TERMS = {
+  ACC: "Area Control Centre", ADS: "Automatic Dependent Surveillance", "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
+  AIP: "Aeronautical Information Publication", AIRAC: "Aeronautical Information Regulation and Control", ALT: "Altitude", AMSL: "Above Mean Sea Level",
+  APP: "Approach", AR: "Authorisation Required", ATC: "Air Traffic Control", ATIS: "Automatic Terminal Information Service", ATS: "Air Traffic Services", ATZ: "Aerodrome Traffic Zone",
+  CPDLC: "Controller–Pilot Data Link Communications", CTR: "Control Zone", EAT: "Expected Approach Time", ETA: "Estimated Time of Arrival",
+  FAF: "Final Approach Fix", FIR: "Flight Information Region", FL: "Flight Level", GND: "Ground", GNSS: "Global Navigation Satellite System",
+  IAF: "Initial Approach Fix", IAS: "Indicated Airspeed", ICAO: "International Civil Aviation Organization", IF: "Intermediate Fix", IFR: "Instrument Flight Rules", IMC: "Instrument Meteorological Conditions",
+  KIAS: "Knots Indicated Airspeed", MHz: "Megahertz", NM: "Nautical Miles", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
+  PAPI: "Precision Approach Path Indicator", PBN: "Performance-Based Navigation", PSR: "Primary Surveillance Radar", QFE: "Altimeter setting that reads height above the aerodrome",
+  QNH: "Altimeter setting that reads altitude above mean sea level", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNAV: "Area Navigation", RNP: "Required Navigation Performance",
+  RVSM: "Reduced Vertical Separation Minimum", RWY: "Runway", SSR: "Secondary Surveillance Radar", TA: "Terminal Area", TCA: "Terminal Control Area", THR: "Threshold",
+  TMA: "Terminal Control Area", TWR: "Tower", UTC: "Coordinated Universal Time", VFR: "Visual Flight Rules", VHF: "Very High Frequency", VMC: "Visual Meteorological Conditions", VPA: "Vertical Path Angle"
+};
+const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
+function termsNote(c) {
+  const found = [...new Set((plain(c.q + " " + c.a)).match(TERM_RE) || [])];
+  return found.length ? `<span class="terms">${found.map(k => `<b>${k}</b> ${TERMS[k]}`).join(" · ")}</span>` : "";
+}
 const DECKS = ["All", "GEN", "ENR", "AD"];
 const store = {
   get() { try { return JSON.parse(localStorage.getItem("aipfc") || "{}"); } catch (e) { return {}; } },
