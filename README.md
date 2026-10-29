@@ -30,3 +30,19 @@ Cards are in the `CARDS` list near the bottom of `index.html`. Each card looks l
 
 ENR cards (focused on the Kota Kinabalu FIR) are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN and AD cards are unchecked samples.
 Always refer to the current AIP. This is a study aid only, not for operational use.
+
+## Version numbers
+
+The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for example 1.4.0.
+
+- PATCH (last number) goes up for card corrections and small fixes.
+- MINOR (middle number) goes up when a new feature is added; PATCH resets to 0.
+- MAJOR (first number) goes up only for a big change, such as adding accounts.
+
+History:
+
+- 1.4.0 (29 Oct 2026): Back and Next buttons in Study mode; new version numbers.
+- 1.3.0: Quiz no longer repeats questions until the whole deck has been used.
+- 1.2.0: Abbreviation explanations, ATS hours cards, Kota Kinabalu RNP Z RWY 20 chart cards.
+- 1.1.0: Flag this answer (Google Form).
+- 1.0.0 (28 Oct 2026): First release with Study and Quiz modes.
