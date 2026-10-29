@@ -100,7 +100,16 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .terms { display: block; margin-top: 6px; }
 .terms b { color: var(--ink); font-weight: 600; }
 .terms-q { margin: -6px 0 0; font-size: .82rem; color: var(--muted); }
-.usage { color: var(--muted); font-size: .85rem; text-align: center; margin: 0; }
+.usage { display: grid; grid-template-columns: auto 1fr 1fr; align-items: stretch; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.usage .tag { writing-mode: vertical-rl; transform: rotate(180deg); background: var(--strip); color: #16202b;
+  font-family: var(--display); font-weight: 700; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  padding: 8px 5px; text-align: center; }
+.usage .cell { padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.usage .cell + .cell { border-left: 1px dashed var(--line); }
+.usage .num { font-family: var(--mono); font-size: 1.45rem; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.usage .lbl { font-family: var(--display); font-weight: 600; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.usage.loading .num { color: var(--line); }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -116,6 +125,12 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
     </div>
     <div class="stats" id="stats"></div>
   </header>
+
+  <div class="usage loading" id="usage" aria-label="Usage by all controllers">
+    <div class="tag" aria-hidden="true">All users</div>
+    <div class="cell"><span class="num" id="usageS">----</span><span class="lbl">Study sessions</span></div>
+    <div class="cell"><span class="num" id="usageQ">----</span><span class="lbl">Quizzes done</span></div>
+  </div>
 
   <div class="modes" role="group" aria-label="Choose a mode">
     <button class="mode" type="button" data-mode="study">Study</button>
@@ -144,10 +159,8 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
     <button class="link" id="resetBtn" type="button">Reset my progress</button>
   </div>
 
-  <p class="usage" id="usage" hidden></p>
-
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.1</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.2</span>
   </footer>
 </div>
 
@@ -562,10 +575,10 @@ async function showUsage() {
   try {
     const get = async n => { const r = await fetch(GC + "/counter/" + encodeURIComponent(n) + ".json"); if (r.status === 404) return "0"; if (!r.ok) throw 0; return (await r.json()).count; };
     const [s, q] = await Promise.all([get("study-session"), get("quiz-completed")]);
-    const el = document.getElementById("usage");
-    el.textContent = "Controllers have done " + s + " study sessions and " + q + " quizzes so far.";
-    el.hidden = false;
-  } catch (e) { /* counter unavailable: show nothing */ }
+    document.getElementById("usageS").textContent = s;
+    document.getElementById("usageQ").textContent = q;
+    document.getElementById("usage").classList.remove("loading");
+  } catch (e) { document.getElementById("usage").hidden = true; /* counter unavailable: hide it */ }
 }
 
 showMode();

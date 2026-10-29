@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.5.2 (29 Oct 2026): Counter redesigned as a small board under the title.
 - 1.5.1 (29 Oct 2026): Counter line shows 0 instead of hiding when one count has no data yet.
 - 1.5.0 (29 Oct 2026): Anonymous usage counter (GoatCounter account "aipflashcard"): counts study sessions and completed quizzes.
 - 1.4.0 (29 Oct 2026): Back and Next buttons in Study mode; new version numbers.
