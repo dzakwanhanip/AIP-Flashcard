@@ -86,6 +86,24 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .opt:disabled { cursor: default; }
 .opt.right { border: 2px solid var(--good); color: var(--good); font-weight: 600; }
 .opt.wrong { border: 2px solid var(--again); color: var(--again); text-decoration: line-through; }
+.opt.right::after { content: "  ✓"; }
+.opt.wrong::after { content: "  ✗"; }
+.qprog { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.qprog i { display: block; height: 100%; background: var(--accent); border-radius: 2px; transition: width .35s ease-out; }
+.best { display: inline-block; font-family: var(--display); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--strip); color: #16202b; padding: 3px 10px; border-radius: 4px; margin-bottom: 4px; }
+.confetti { position: absolute; top: -10px; width: 8px; height: 12px; border-radius: 2px; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .opt.right.hit { animation: pulse .45s ease-out; }
+  .opt.wrong.hit { animation: shake .4s ease-in-out; }
+  .opt.right.late { animation: pulse .45s ease-out .25s; }
+  .slide-in { animation: slidein .25s ease-out; }
+  .best { animation: pop .45s cubic-bezier(.3, 1.6, .5, 1) .5s both; }
+}
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--good); } 100% { box-shadow: 0 0 0 10px transparent; } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes slidein { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
 .score { font-family: var(--display); font-weight: 700; font-size: 3.2rem; line-height: 1; margin: 6px 0; font-variant-numeric: tabular-nums; }
 .btn.go { color: var(--accent); border-color: var(--accent); width: 100%; }
 .flagbox { display: flex; flex-direction: column; gap: 6px; font-size: .9rem; }
@@ -160,7 +178,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.6.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.7.0</span>
   </footer>
 </div>
 
@@ -429,41 +447,84 @@ function pick(n) {
   if (!quiz || quiz.picked !== null || quiz.i >= quiz.cards.length) return;
   quiz.picked = n;
   if (quiz.opts[n] === quiz.cards[quiz.i].a) quiz.score++;
+  quiz.fresh = true;
   renderQuiz();
+  quiz.fresh = false;
 }
+const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 function nextQuestion() {
-  quiz.i++; quiz.picked = null; flag.open = false;
-  if (quiz.i < quiz.cards.length) quiz.opts = optionsFor(quiz.cards[quiz.i]);
-  else { const pct = Math.round(100 * quiz.score / quiz.cards.length); if (!(best[deck] >= pct)) best[deck] = pct; save(); track("quiz-completed"); }
-  renderQuiz();
+  const go = () => {
+    quiz.i++; quiz.picked = null; flag.open = false;
+    if (quiz.i < quiz.cards.length) quiz.opts = optionsFor(quiz.cards[quiz.i]);
+    else { const pct = Math.round(100 * quiz.score / quiz.cards.length); quiz.newBest = !(best[deck] >= pct); if (quiz.newBest) best[deck] = pct; save(); track("quiz-completed"); }
+    quiz.slide = true; renderQuiz(); quiz.slide = false;
+  };
+  const card = document.querySelector("#quizArea .card");
+  if (quiz.leaving) return;
+  if (!card || !card.animate || calm()) { go(); return; }
+  // Slide the answered question out to the left, then bring the next one in.
+  quiz.leaving = true;
+  card.animate([{ transform: "none", opacity: 1 }, { transform: "translateX(-40px)", opacity: 0 }], { duration: 160, easing: "ease-in", fill: "forwards" })
+    .onfinish = () => { quiz.leaving = false; go(); };
+}
+function countUp(el, to, fmt) {
+  if (calm()) { el.textContent = fmt(to); return; }
+  const t0 = performance.now(), ms = 700;
+  const tick = t => { const k = Math.min(1, Math.max(0, (t - t0) / ms)); el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(tick); };
+  el.textContent = fmt(0); requestAnimationFrame(tick);
+}
+function confetti(box) {
+  if (calm() || !box.animate) return;
+  const css = getComputedStyle(document.documentElement);
+  const colors = ["--accent", "--strip", "--good", "--again"].map(v => css.getPropertyValue(v).trim());
+  for (let k = 0; k < 40; k++) {
+    const d = document.createElement("i");
+    d.className = "confetti";
+    d.style.left = (Math.random() * 100) + "%";
+    d.style.background = colors[k % colors.length];
+    box.appendChild(d);
+    const drift = (Math.random() - .5) * 120, spin = (Math.random() - .5) * 720, fall = box.clientHeight * (.6 + Math.random() * .5);
+    d.animate([{ transform: "translate(0, 0) rotate(0)", opacity: 1 }, { transform: `translate(${drift}px, ${fall}px) rotate(${spin}deg)`, opacity: 0 }],
+      { duration: 1200 + Math.random() * 900, delay: 400 + Math.random() * 300, easing: "cubic-bezier(.2,.6,.4,1)", fill: "both" }).onfinish = () => d.remove();
+  }
 }
 function renderQuiz() {
   const area = document.getElementById("quizArea");
   const total = quiz.cards.length;
   if (quiz.i >= total) {
     const pct = Math.round(100 * quiz.score / total);
-    area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content done">
+    area.innerHTML = `<div class="card${quiz.slide && !calm() ? " slide-in" : ""}" style="cursor:default"><div class="bar"></div><div class="content done">
       <div class="side">Quiz complete · ${deck}</div>
-      <div class="score">${quiz.score} / ${total}</div>
-      <p>${pct}% correct. Your best on this deck: ${best[deck]}%.</p>
+      ${quiz.newBest ? `<div><span class="best">New best!</span></div>` : ""}
+      <div class="score"><span id="scoreNum">${quiz.score}</span> / ${total}</div>
+      <p><span id="pctNum">${pct}%</span> correct. Your best on this deck: ${best[deck]}%.</p>
       <p class="sub">${quiz.left ? `${quiz.left} of ${quiz.total} questions in this deck still to come before any repeat.` : `You have now seen every question in this deck. The next quiz starts a fresh round.`}</p>
       <button class="btn go" id="againQuiz" type="button">New quiz</button></div></div>`;
+    if (quiz.slide) {
+      countUp(document.getElementById("scoreNum"), quiz.score, String);
+      countUp(document.getElementById("pctNum"), pct, v => v + "%");
+      if (quiz.newBest) confetti(area.querySelector(".card"));
+    }
     return;
   }
   const c = quiz.cards[quiz.i], done = quiz.picked !== null;
-  area.innerHTML = `<div class="card" style="cursor:default"><div class="bar"></div><div class="content">
+  const shown = quiz.i + (done ? 1 : 0), before = quiz.fresh ? shown - 1 : shown;
+  area.innerHTML = `<div class="card${quiz.slide && !calm() ? " slide-in" : ""}" style="cursor:default"><div class="bar"></div><div class="content">
+    <div class="qprog" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${shown}"><i style="width:${100 * before / total}%"></i></div>
     <div class="qbar"><span>Question ${quiz.i + 1} of ${total}</span><span>Score ${quiz.score}</span></div>
     <div class="meta"><span>${c.part}</span><span class="ref">${c.ref}</span></div>
     <p class="q">${c.q}</p>${questionTerms(c)}
     <div class="opts">${quiz.opts.map((o, n) => {
       let cls = "opt";
-      if (done && o === c.a) cls += " right";
-      else if (done && n === quiz.picked) cls += " wrong";
+      if (done && o === c.a) cls += " right" + (quiz.fresh ? (n === quiz.picked ? " hit" : " late") : "");
+      else if (done && n === quiz.picked) cls += " wrong" + (quiz.fresh ? " hit" : "");
       return `<button class="${cls}" type="button" data-opt="${n}" ${done ? "disabled" : ""}>${o}</button>`;
     }).join("")}</div>
     ${done ? `<div class="verify">${sourceNote(c)}</div>${flagBlock(c)}
       <button class="btn go" id="nextQ" type="button">${quiz.i + 1 < total ? "Next question" : "See score"}</button>` : ""}
   </div></div>`;
+  const bar = area.querySelector(".qprog i");
+  if (before !== shown) requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = (100 * shown / total) + "%"; }));
 }
 
 function showMode() {

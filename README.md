@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.7.0 (29 Oct 2026): Quiz animations: answer pulse/shake with tick and cross, progress bar, slide to next question, score count-up, confetti and "New best!" badge.
 - 1.6.0 (29 Oct 2026): Card flip animation when revealing the answer.
 - 1.5.4 (29 Oct 2026): Counter moved to just above the disclaimer.
 - 1.5.3 (29 Oct 2026): Counter reads event counts more reliably.
