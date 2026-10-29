@@ -100,6 +100,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .terms { display: block; margin-top: 6px; }
 .terms b { color: var(--ink); font-weight: 600; }
 .terms-q { margin: -6px 0 0; font-size: .82rem; color: var(--muted); }
+.usage { color: var(--muted); font-size: .85rem; text-align: center; margin: 0; }
 footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 12px; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform .12s ease; } .card:active { transform: scale(.99); } }
 </style>
@@ -143,8 +144,10 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
     <button class="link" id="resetBtn" type="button">Reset my progress</button>
   </div>
 
+  <p class="usage" id="usage" hidden></p>
+
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.4.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.0</span>
   </footer>
 </div>
 
@@ -418,7 +421,7 @@ function pick(n) {
 function nextQuestion() {
   quiz.i++; quiz.picked = null; flag.open = false;
   if (quiz.i < quiz.cards.length) quiz.opts = optionsFor(quiz.cards[quiz.i]);
-  else { const pct = Math.round(100 * quiz.score / quiz.cards.length); if (!(best[deck] >= pct)) best[deck] = pct; save(); }
+  else { const pct = Math.round(100 * quiz.score / quiz.cards.length); if (!(best[deck] >= pct)) best[deck] = pct; save(); track("quiz-completed"); }
   renderQuiz();
 }
 function renderQuiz() {
@@ -501,7 +504,7 @@ function render() {
     </div></div>`;
 }
 
-function flip() { if (current) { flipped = !flipped; render(); } }
+function flip() { if (current) { flipped = !flipped; if (flipped) track("study-session", true); render(); } }
 function answer(gotIt) {
   if (!current || !flipped) return;
   queue.splice(pos, 1);
@@ -546,7 +549,28 @@ document.addEventListener("keydown", e => {
   else if (flipped && e.key === "2") answer(true);
 });
 
+// ----- USAGE COUNTER (GoatCounter: anonymous, no cookies, no names) -----
+const GC = "https://aipflashcard.goatcounter.com";
+const tracked = {};
+function track(name, oncePerVisit) {
+  if (oncePerVisit && tracked[name]) return;
+  tracked[name] = true;
+  const send = () => { if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: name, title: name, event: true }); return true; } };
+  try { if (!send()) setTimeout(() => { try { send(); } catch (e) {} }, 3000); } catch (e) {}
+}
+async function showUsage() {
+  try {
+    const get = async n => { const r = await fetch(GC + "/counter/" + encodeURIComponent(n) + ".json"); if (!r.ok) throw 0; return (await r.json()).count; };
+    const [s, q] = await Promise.all([get("study-session"), get("quiz-completed")]);
+    const el = document.getElementById("usage");
+    el.textContent = "Controllers have done " + s + " study sessions and " + q + " quizzes so far.";
+    el.hidden = false;
+  } catch (e) { /* counter unavailable: show nothing */ }
+}
+
 showMode();
+showUsage();
 </script>
+<script data-goatcounter="https://aipflashcard.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>

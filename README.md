@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.5.0 (29 Oct 2026): Anonymous usage counter (GoatCounter account "aipflashcard"): counts study sessions and completed quizzes.
 - 1.4.0 (29 Oct 2026): Back and Next buttons in Study mode; new version numbers.
 - 1.3.0: Quiz no longer repeats questions until the whole deck has been used.
 - 1.2.0: Abbreviation explanations, ATS hours cards, Kota Kinabalu RNP Z RWY 20 chart cards.
