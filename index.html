@@ -160,7 +160,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.4</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.6.0</span>
   </footer>
 </div>
 
@@ -517,7 +517,22 @@ function render() {
     </div></div>`;
 }
 
-function flip() { if (current) { flipped = !flipped; if (flipped) track("study-session", true); render(); } }
+let flipping = false;
+function flip() {
+  if (!current || flipping) return;
+  const swap = () => { flipped = !flipped; if (flipped) track("study-session", true); render(); };
+  const el = document.getElementById("card");
+  if (!el || !el.animate || matchMedia("(prefers-reduced-motion: reduce)").matches) { swap(); return; }
+  // Turn the card edge-on, swap question/answer, then turn it back to face the user.
+  flipping = true;
+  const half = (from, to, ms, ease) => [[{ transform: `perspective(1000px) rotateY(${from}deg)` }, { transform: `perspective(1000px) rotateY(${to}deg)` }], { duration: ms, easing: ease }];
+  el.animate(...half(0, 90, 150, "ease-in")).onfinish = () => {
+    swap();
+    const n = document.getElementById("card");
+    const a = n && n.animate(...half(-90, 0, 200, "ease-out"));
+    if (a) a.onfinish = () => { flipping = false; }; else flipping = false;
+  };
+}
 function answer(gotIt) {
   if (!current || !flipped) return;
   queue.splice(pos, 1);
