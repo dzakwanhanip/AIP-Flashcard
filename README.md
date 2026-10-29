@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.5.4 (29 Oct 2026): Counter moved to just above the disclaimer.
 - 1.5.3 (29 Oct 2026): Counter reads event counts more reliably.
 - 1.5.2 (29 Oct 2026): Counter redesigned as a small board under the title.
 - 1.5.1 (29 Oct 2026): Counter line shows 0 instead of hiding when one count has no data yet.
