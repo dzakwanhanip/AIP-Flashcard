@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 17</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">App version 18</span>
   </footer>
 </div>
 
@@ -218,7 +218,7 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Kuching Terminal Area?", a: "FL245 / 2 500 ft ALT", w: ["FL245 / 3 000 ft ALT", "FL145 / 2 500 ft ALT", "FL150 / 1 500 ft ALT"] },
   { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Miri TMA?", a: "FL145 / 2 500 ft ALT", w: ["FL245 / 2 500 ft ALT", "FL145 / 3 000 ft ALT", "11 500 ft ALT / 2 500 ft ALT"] },
   { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Sibu TMA?", a: "11 500 ft ALT / 2 500 ft ALT", w: ["FL145 / 2 500 ft ALT", "11 000 ft ALT / 1 500 ft ALT", "FL245 / 3 000 ft ALT"] },
-  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Brunei TCA?", a: "FL145 / 3 000 ft ALT", w: ["FL245 / 3 000 ft ALT", "FL145 / 2 500 ft ALT", "FL150 / 1 500 ft ALT"] },
+  { part: "ENR", v: 1, ref: "ENR 2.1", g: "limits", q: "Vertical limits of the Brunei Terminal Control Area?", a: "FL145 / 3 000 ft ALT", w: ["FL245 / 3 000 ft ALT", "FL145 / 2 500 ft ALT", "FL150 / 1 500 ft ALT"] },
   { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code blocks for international departures in the Kota Kinabalu FIR?", a: "<code>2001</code>–<code>2077</code> and <code>0400</code>–<code>0477</code>", w: ["<code>2100</code>–<code>2177</code> and <code>2600</code>–<code>2677</code>", "<code>2001</code>–<code>2077</code> and <code>0500</code>–<code>0577</code>", "<code>3100</code>–<code>3177</code> and <code>0400</code>–<code>0477</code>"] },
   { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code blocks for domestic flights in the Kota Kinabalu FIR?", a: "<code>0500</code>–<code>0577</code>, <code>3100</code>–<code>3177</code> and <code>5200</code>–<code>5277</code>", w: ["<code>0300</code>–<code>0377</code>, <code>3000</code>–<code>3077</code> and <code>5100</code>–<code>5177</code>", "<code>0400</code>–<code>0477</code>, <code>3100</code>–<code>3177</code> and <code>5200</code>–<code>5277</code>", "<code>0500</code>–<code>0577</code>, <code>3400</code>–<code>3477</code> and <code>5400</code>–<code>5477</code>"] },
   { part: "ENR", v: 1, ref: "ENR 1.6.3.3.1", g: "ssr", q: "SSR code block allocated to Brunei in the Kota Kinabalu FIR?", a: "<code>7300</code>–<code>7377</code>", w: ["<code>7200</code>–<code>7277</code>", "<code>5200</code>–<code>5277</code>", "<code>7400</code>–<code>7477</code>"] },
@@ -332,7 +332,7 @@ const TERMS = {
   AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
   GNSS: "Global Navigation Satellite System", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
   PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
-  TA: "Terminal Area", TCA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle"
+  TA: "Terminal Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
 const termsIn = text => [...new Set(plain(text).match(TERM_RE) || [])];
