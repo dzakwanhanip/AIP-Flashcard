@@ -147,7 +147,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   <p class="usage" id="usage" hidden></p>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.5.1</span>
   </footer>
 </div>
 
@@ -560,7 +560,7 @@ function track(name, oncePerVisit) {
 }
 async function showUsage() {
   try {
-    const get = async n => { const r = await fetch(GC + "/counter/" + encodeURIComponent(n) + ".json"); if (!r.ok) throw 0; return (await r.json()).count; };
+    const get = async n => { const r = await fetch(GC + "/counter/" + encodeURIComponent(n) + ".json"); if (r.status === 404) return "0"; if (!r.ok) throw 0; return (await r.json()).count; };
     const [s, q] = await Promise.all([get("study-session"), get("quiz-completed")]);
     const el = document.getElementById("usage");
     el.textContent = "Controllers have done " + s + " study sessions and " + q + " quizzes so far.";
