@@ -93,13 +93,16 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .best { display: inline-block; font-family: var(--display); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
   background: var(--strip); color: #16202b; padding: 3px 10px; border-radius: 4px; margin-bottom: 4px; }
 .confetti { position: absolute; top: -10px; width: 8px; height: 12px; border-radius: 2px; pointer-events: none; }
+.reveal { display: flex; flex-direction: column; gap: 14px; }
 @media (prefers-reduced-motion: no-preference) {
+  .reveal.wipe { animation: wipe .6s ease-out; }
   .opt.right.hit { animation: pulse .45s ease-out; }
   .opt.wrong.hit { animation: shake .4s ease-in-out; }
   .opt.right.late { animation: pulse .45s ease-out .25s; }
   .slide-in { animation: slidein .25s ease-out; }
   .best { animation: pop .45s cubic-bezier(.3, 1.6, .5, 1) .5s both; }
 }
+@keyframes wipe { from { clip-path: inset(0 0 100% 0); opacity: .2; } to { clip-path: inset(0 0 0 0); opacity: 1; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--good); } 100% { box-shadow: 0 0 0 10px transparent; } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 @keyframes slidein { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -178,7 +181,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.7.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.7.1</span>
   </footer>
 </div>
 
@@ -573,26 +576,17 @@ function render() {
       <div class="meta"><span>${current.part}</span><span class="ref">${current.ref}</span></div>
       <div class="side">${flipped ? "Answer" : "Question"}</div>
       <p class="q">${current.q}</p>${questionTerms(current)}
-      ${flipped ? `<p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>${flagBlock(current)}`
+      ${flipped ? `<div class="reveal${revealing ? " wipe" : ""}"><p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>${flagBlock(current)}</div>`
                 : `<div class="hint">Tap the card or press Space to show the answer</div>`}
     </div></div>`;
 }
 
-let flipping = false;
+let revealing = false;
 function flip() {
-  if (!current || flipping) return;
-  const swap = () => { flipped = !flipped; if (flipped) track("study-session", true); render(); };
-  const el = document.getElementById("card");
-  if (!el || !el.animate || matchMedia("(prefers-reduced-motion: reduce)").matches) { swap(); return; }
-  // Turn the card edge-on, swap question/answer, then turn it back to face the user.
-  flipping = true;
-  const half = (from, to, ms, ease) => [[{ transform: `perspective(1000px) rotateY(${from}deg)` }, { transform: `perspective(1000px) rotateY(${to}deg)` }], { duration: ms, easing: ease }];
-  el.animate(...half(0, 90, 150, "ease-in")).onfinish = () => {
-    swap();
-    const n = document.getElementById("card");
-    const a = n && n.animate(...half(-90, 0, 200, "ease-out"));
-    if (a) a.onfinish = () => { flipping = false; }; else flipping = false;
-  };
+  if (!current) return;
+  flipped = !flipped;
+  if (flipped) track("study-session", true);
+  revealing = flipped; render(); revealing = false;
 }
 function answer(gotIt) {
   if (!current || !flipped) return;
