@@ -211,7 +211,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.9.1</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.9.2</span>
   </footer>
 </div>
 
@@ -701,23 +701,26 @@ document.addEventListener("keydown", e => {
   else if (flipped && e.key === "2") answer(true);
 });
 
-// ----- USAGE COUNTER (GoatCounter: anonymous, no cookies, no names) -----
-const GC = "https://aipflashcard.goatcounter.com";
+// ----- USAGE COUNTER (anonymous, no cookies, no names) -----
+// GoatCounter keeps the private dashboard; Abacus keeps the public totals shown in the app,
+// because it adds 1 on every hit and answers straight away.
+const TALLY = "https://abacus.jasoncameron.dev", NS = "dzakwanhanip-aip-flashcard";
+const BOARD = { "study-session": "usageS", "quiz-completed": "usageQ" };
 const tracked = {};
+const showCount = (name, v) => { document.getElementById(BOARD[name]).textContent = Number(v).toLocaleString("en-US"); };
 function track(name, oncePerVisit) {
   if (oncePerVisit && tracked[name]) return;
   tracked[name] = true;
   const send = () => { if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: name, title: name, event: true }); return true; } };
   try { if (!send()) setTimeout(() => { try { send(); } catch (e) {} }, 3000); } catch (e) {}
+  fetch(TALLY + "/hit/" + NS + "/" + name, { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null).then(d => { if (d && d.value != null) showCount(name, d.value); }).catch(() => {});
 }
 async function showUsage() {
   try {
-    // Event names are looked up both without and with a leading "/", and never from the browser cache.
-    const one = async path => { const r = await fetch(GC + "/counter/" + encodeURIComponent(path) + ".json", { cache: "no-store" }); if (r.status === 404) return null; if (!r.ok) throw 0; return (await r.json()).count; };
-    const get = async n => (await one(n)) || (await one("/" + n)) || "0";
+    const get = async n => { const r = await fetch(TALLY + "/get/" + NS + "/" + n, { cache: "no-store" }); if (r.status === 404) return 0; if (!r.ok) throw 0; return (await r.json()).value; };
     const [s, q] = await Promise.all([get("study-session"), get("quiz-completed")]);
-    document.getElementById("usageS").textContent = s;
-    document.getElementById("usageQ").textContent = q;
+    showCount("study-session", s); showCount("quiz-completed", q);
     document.getElementById("usage").classList.remove("loading");
   } catch (e) { document.getElementById("usage").hidden = true; /* counter unavailable: hide it */ }
 }
