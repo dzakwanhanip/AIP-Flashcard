@@ -38,6 +38,25 @@ body { background: var(--bg); color: var(--ink); font-family: var(--body); font-
 header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-spacing: .01em; margin: 0; line-height: 1.1; text-wrap: balance; }
 .sub { color: var(--muted); font-size: .9rem; margin: 2px 0 0; }
+.hright { display: flex; align-items: center; gap: 12px; }
+.howbtn { font-family: var(--display); font-weight: 700; font-size: .9rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); background: var(--surface); border: 1px solid var(--accent); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+.how { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); color: var(--ink); overflow: auto; }
+.how::backdrop { background: rgba(10, 16, 22, .55); }
+.how .head { display: grid; grid-template-columns: 14px 1fr; }
+.how .head .bar { background: var(--strip); }
+.how .head div:last-child { padding: 16px 20px 6px; }
+.how h2 { font-family: var(--display); font-size: 1.6rem; margin: 0; line-height: 1.1; }
+.how .kicker { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-size: .8rem; }
+.how dl { margin: 0; padding: 8px 20px 4px 34px; display: grid; gap: 12px; }
+.how dt { font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: .04em; text-transform: uppercase; }
+.how dt.again { color: var(--again); } .how dt.good { color: var(--good); } .how dt.blue { color: var(--accent); }
+.how dd { margin: 2px 0 0; color: var(--ink); }
+.how dd i { color: var(--muted); }
+.how .foot { padding: 12px 20px 18px 34px; display: flex; flex-direction: column; gap: 12px; }
+.how .foot p { margin: 0; font-size: .85rem; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .how[open] { animation: slidein .25s ease-out; } }
 .stats { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .decks { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -144,7 +163,10 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
       <h1>Malaysia AIP Flash Cards</h1>
       <p class="sub">Study aid for air traffic controllers</p>
     </div>
-    <div class="stats" id="stats"></div>
+    <div class="hright">
+      <div class="stats" id="stats"></div>
+      <button class="howbtn" id="howBtn" type="button" aria-haspopup="dialog">How To</button>
+    </div>
   </header>
 
   <div class="modes" role="group" aria-label="Choose a mode">
@@ -181,9 +203,30 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.7.1</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.8.0</span>
   </footer>
 </div>
+
+<dialog class="how" id="howDlg" aria-labelledby="howTitle">
+  <div class="head"><div class="bar"></div><div>
+    <div class="kicker">Pre-flight briefing</div>
+    <h2 id="howTitle" tabindex="-1" autofocus style="outline:none">How to use the flash cards</h2>
+  </div></div>
+  <dl>
+    <div><dt class="blue">Pick a deck</dt><dd>ALL, GEN, ENR or AD. Each deck is a part of the AIP.</dd></div>
+    <div><dt class="blue">Tap the card</dt><dd>Read the question and think of your answer, then tap the card (or press Space) to reveal it. Tap again to hide it.</dd></div>
+    <div><dt class="blue">Back / Next</dt><dd>Move through the cards without revealing the answers, like scanning down your strip board.</dd></div>
+    <div><dt class="again">Again</dt><dd>Not sure yet? The card goes to the back of the pile and comes round again later. <i>Go around and try another approach.</i></dd></div>
+    <div><dt class="good">Got it</dt><dd>You knew it. The card is marked learned and leaves the pile. <i>Cleared to land.</i></dd></div>
+    <div><dt class="blue">Learned counter</dt><dd>At the top, e.g. "12 / 110 learned": how many cards in this deck you have marked Got it.</dd></div>
+    <div><dt class="blue">Shuffle deck</dt><dd>Mixes the cards still in your pile into a new order.</dd></div>
+    <div><dt class="blue">Reset my progress</dt><dd>Puts every learned card back into the pile and sets the counter to 0. Use it when you want to start the deck again.</dd></div>
+  </dl>
+  <div class="foot">
+    <p>Your progress is saved on this phone or browser only. Spot a wrong answer? Reveal it and tap "Flag this answer as wrong".</p>
+    <button class="btn go" id="howClose" type="button">Roger</button>
+  </div>
+</dialog>
 
 <script>
 // ----- CARD LIST -----
@@ -538,6 +581,7 @@ function showMode() {
   document.getElementById("actions").hidden = isQuiz;
   document.getElementById("nav").hidden = isQuiz;
   document.getElementById("shuffleBtn").hidden = isQuiz;
+  document.getElementById("howBtn").hidden = isQuiz;
   document.getElementById("resetBtn").hidden = isQuiz;
   if (isQuiz) { render(); startQuiz(); } else buildQueue(true);
 }
@@ -617,8 +661,16 @@ document.getElementById("fwdBtn").onclick = () => step(1);
 document.getElementById("againBtn").onclick = () => answer(false);
 document.getElementById("goodBtn").onclick = () => answer(true);
 document.getElementById("shuffleBtn").onclick = () => buildQueue(true);
+const howDlg = document.getElementById("howDlg");
+document.getElementById("howBtn").onclick = () => {
+  if (howDlg.showModal) howDlg.showModal(); else howDlg.setAttribute("open", "");
+  document.getElementById("howTitle").focus({ preventScroll: true }); howDlg.scrollTop = 0;
+};
+document.getElementById("howClose").onclick = () => { if (howDlg.close) howDlg.close(); else howDlg.removeAttribute("open"); };
+howDlg.addEventListener("click", e => { if (e.target === howDlg && howDlg.close) howDlg.close(); });
 document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(true); };
 document.addEventListener("keydown", e => {
+  if (howDlg.open) return;
   if (e.target.closest && e.target.closest("button:not(#card), input, textarea")) return;
   if (mode === "quiz") {
     if (quiz && quiz.picked === null && /^[1-4]$/.test(e.key)) pick(+e.key - 1);
