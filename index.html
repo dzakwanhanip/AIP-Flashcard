@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16202b">
+<meta name="apple-mobile-web-app-title" content="AIP Flash Cards">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <title>Malaysia AIP Flash Cards</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +64,16 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .how .foot { padding: 12px 20px 18px 34px; display: flex; flex-direction: column; gap: 12px; }
 .how .foot p { margin: 0; font-size: .85rem; color: var(--muted); }
 @media (prefers-reduced-motion: no-preference) { .how[open] { animation: slidein .25s ease-out; } }
+.tipbar { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--strip);
+  border-radius: 6px; padding: 8px 8px 8px 12px; font-size: .9rem; }
+.tipbar span { flex: 1; }
+.tipbar .link { font-weight: 600; }
+.tipbar .x { border: 0; background: none; color: var(--muted); font-size: 1.1rem; padding: 4px 8px; cursor: pointer; }
+.how .tip { background: var(--bg); border-left: 6px solid var(--strip); border-radius: 6px; padding: 10px 12px; font-size: .9rem; }
+.how .tip b { font-family: var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.how .tip ol { margin: 4px 0 8px; padding-left: 20px; }
+.how .tip ol b { font-family: inherit; letter-spacing: 0; text-transform: none; }
+.how .tip p { color: var(--ink); }
 .stats { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .decks { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -177,6 +193,12 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
     </div>
   </header>
 
+  <div class="tipbar" id="tipbar" hidden>
+    <span><b>Pro tip:</b> add this app to your home screen.</span>
+    <button class="link" id="tipShow" type="button">Show me</button>
+    <button class="x" id="tipX" type="button" aria-label="Dismiss tip">✕</button>
+  </div>
+
   <div class="modes" role="group" aria-label="Choose a mode">
     <button class="mode" type="button" data-mode="study">Study</button>
     <button class="mode" type="button" data-mode="quiz">Quiz</button>
@@ -211,7 +233,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.9.3</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.10.0</span>
   </footer>
 </div>
 
@@ -239,6 +261,14 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
     <div><dt class="blue">No repeats</dt><dd>Each quiz picks questions you have not had yet, until you have seen the whole deck. Then it starts a fresh round.</dd></div>
   </dl>
   <div class="foot">
+    <div class="tip" id="homeTip">
+      <b>Pro tip: add to your home screen</b>
+      <p>Open the app in one tap, like any other app.</p>
+      <div><b>iPhone / iPad (Safari)</b></div>
+      <ol><li>Tap the Share button (square with an arrow).</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>.</li></ol>
+      <div><b>Android (Chrome)</b></div>
+      <ol><li>Tap the ⋮ menu at the top right.</li><li>Tap <b>Add to Home screen</b>.</li><li>Tap <b>Add</b> (choose <b>Create shortcut</b> if asked).</li></ol>
+    </div>
     <p>Your progress is saved on this phone or browser only. Spot a wrong answer? After the answer shows, tap "Flag this answer as wrong".</p>
     <button class="btn go" id="howClose" type="button">Copied</button>
   </div>
@@ -679,10 +709,22 @@ document.getElementById("againBtn").onclick = () => answer(false);
 document.getElementById("goodBtn").onclick = () => answer(true);
 document.getElementById("shuffleBtn").onclick = () => buildQueue(true);
 const howDlg = document.getElementById("howDlg");
-document.getElementById("howBtn").onclick = () => {
+function openHow(toTip) {
   if (howDlg.showModal) howDlg.showModal(); else howDlg.setAttribute("open", "");
   document.getElementById("howTitle").focus({ preventScroll: true }); howDlg.scrollTop = 0;
-};
+  if (toTip) document.getElementById("homeTip").scrollIntoView({ block: "start" });
+}
+document.getElementById("howBtn").onclick = () => openHow(false);
+// Home-screen tip: phones only, until dismissed.
+const tipbar = document.getElementById("tipbar");
+const onPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+const fromHome = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+let tipGone = false;
+try { tipGone = localStorage.getItem("aipfc-tip-dismissed") === "1"; } catch (e) {}
+tipbar.hidden = !onPhone || fromHome || tipGone;
+const dismissTip = () => { tipbar.hidden = true; try { localStorage.setItem("aipfc-tip-dismissed", "1"); } catch (e) {} };
+document.getElementById("tipX").onclick = dismissTip;
+document.getElementById("tipShow").onclick = () => { dismissTip(); openHow(true); };
 document.getElementById("howClose").onclick = () => { if (howDlg.close) howDlg.close(); else howDlg.removeAttribute("open"); };
 howDlg.addEventListener("click", e => { if (e.target === howDlg && howDlg.close) howDlg.close(); });
 document.getElementById("resetBtn").onclick = () => { known.clear(); save(); buildQueue(true); };
