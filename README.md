@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.9.3 (30 Oct 2026): A new study session counts only after 30 minutes without revealing a card.
 - 1.9.2 (30 Oct 2026): App counter now uses Abacus (counts every session, updates instantly); GoatCounter kept for the dashboard.
 - 1.9.1 (30 Oct 2026): How To close button says "Copied".
 - 1.9.0 (30 Oct 2026): How To covers the quiz too, ATC-style wording; perfect-score celebration.

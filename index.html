@@ -211,7 +211,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.9.2</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.9.3</span>
   </footer>
 </div>
 
@@ -646,7 +646,7 @@ let revealing = false;
 function flip() {
   if (!current) return;
   flipped = !flipped;
-  if (flipped) track("study-session", true);
+  if (flipped) studyActivity();
   revealing = flipped; render(); revealing = false;
 }
 function answer(gotIt) {
@@ -715,6 +715,15 @@ function track(name, oncePerVisit) {
   try { if (!send()) setTimeout(() => { try { send(); } catch (e) {} }, 3000); } catch (e) {}
   fetch(TALLY + "/hit/" + NS + "/" + name, { cache: "no-store" })
     .then(r => r.ok ? r.json() : null).then(d => { if (d && d.value != null) showCount(name, d.value); }).catch(() => {});
+}
+// A study session = revealing a card after 30 minutes or more without revealing any (or a first visit).
+const GAP_MS = 30 * 60 * 1000;
+function studyActivity() {
+  let last = 0;
+  try { last = +localStorage.getItem("aipfc-last-reveal") || 0; } catch (e) {}
+  const now = Date.now();
+  if (now - last >= GAP_MS) track("study-session");
+  try { localStorage.setItem("aipfc-last-reveal", String(now)); } catch (e) {}
 }
 async function showUsage() {
   try {
