@@ -233,7 +233,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.10.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.11.0</span>
   </footer>
 </div>
 
@@ -399,6 +399,31 @@ const CARDS = [
   { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", q: "Kota Kinabalu (WBKK): aerodrome elevation and THR RWY 20 elevation?", a: "Aerodrome 14 ft, THR RWY 20 11 ft", w: ["Aerodrome 11 ft, THR RWY 20 14 ft", "Aerodrome 14 ft, THR RWY 20 14 ft", "Aerodrome 21 ft, THR RWY 20 11 ft"] },
   { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "freq", q: "Kota Kinabalu (WBKK): APP and TWR frequencies?", a: "APP 119.1 MHz, TWR 118.3 MHz", w: ["APP 118.3 MHz, TWR 119.1 MHz", "APP 126.1 MHz, TWR 118.3 MHz", "APP 119.1 MHz, TWR 119.7 MHz"] },
   { part: "AD", v: 1, ref: "AD 2-WBKK-8-27", g: "freq", q: "Kota Kinabalu (WBKK): GND and ATIS frequencies?", a: "GND 121.6 MHz, ATIS 127.4 MHz", w: ["GND 121.9 MHz, ATIS 127.4 MHz", "GND 121.6 MHz, ATIS 128.4 MHz", "GND 127.4 MHz, ATIS 121.6 MHz"] },
+  // ----- Added 30 OCT 2026 from AIRAC AIP AMDT 04/26: written from the controller's side -----
+  { part: "ENR", v: 1, ref: "ENR 1.12.2.1", g: "intercept", q: "A pilot on your frequency reports being intercepted. Unless you instruct otherwise, which SSR code should they select?", a: "<code>7700</code>", w: ["<code>7500</code>", "<code>7600</code>", "<code>2000</code>"] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.2.1", g: "intercept", q: "An intercepted aircraft should first make a general call on which frequency?", a: "121.5 MHz", w: ["123.45 MHz", "123.1 MHz", "121.9 MHz"] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.2.1", g: "intercept", q: "An intercepted aircraft gets no answer on 121.5 MHz. Which frequency should it repeat the call on, if practicable?", a: "123.45 MHz", w: ["123.1 MHz", "122.8 MHz", "121.9 MHz"] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.2.2", g: "intercept", q: "Your radio instructions conflict with the visual signals from the intercepting aircraft. What should the intercepted pilot do?", a: "Ask for immediate clarification and keep following the visual signals.", w: ["Follow ATC's instructions until it is clarified.", "Hold present position until it is clarified.", "Follow whichever instruction came first."] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.2.3", g: "intercept", q: "Your radio instructions conflict with the intercepting aircraft's radio instructions. What should the intercepted pilot do?", a: "Ask for immediate clarification and keep following the intercepting aircraft's radio instructions.", w: ["Follow ATC's radio instructions until it is clarified.", "Select code 7600 and continue on the cleared route.", "Stop following any instructions until it is clarified."] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepting aircraft makes an abrupt climbing break-away turn of 90° or more. Meaning?", a: "You may proceed.", w: ["Follow me.", "Land at this aerodrome.", "Descend now."] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepted aircraft flashes all available lights irregularly. Meaning?", a: "In distress.", w: ["Cannot comply.", "The designated aerodrome is inadequate.", "Understood, will comply."] },
+  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepted aircraft switches all available lights on and off at regular intervals. Meaning?", a: "Cannot comply.", w: ["In distress.", "The designated aerodrome is inadequate.", "Position unknown."] },
+  { part: "ENR", v: 1, ref: "ENR 1.14.2.2", g: "report", q: "After an AIRPROX on your sector, where does the pilot submit the incident report?", a: "CAReS, the CAAM Aviation Safety Reporting System online portal", w: ["The paper incident form at the ATCC", "By email to the CAAM Director General", "The e-FPL portal"] },
+  { part: "ENR", v: 1, ref: "ENR 1.14.3.3", g: "report", q: "Deadline to submit a Mandatory Occurrence Report (MOR) through CAReS?", a: "Within 48 hours of the occurrence", w: ["Within 24 hours of the occurrence", "Within 72 hours of the occurrence", "Within 7 days of the occurrence"] },
+  { part: "ENR", v: 1, ref: "ENR 1.14.3.3", g: "report", q: "Deadline to submit other incident reports (not MORs) through CAReS?", a: "Within 30 days of the occurrence", w: ["Within 14 days of the occurrence", "Within 7 days of the occurrence", "Within 60 days of the occurrence"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.1.5", g: "fpl", q: "Earliest a flight plan may be submitted before EOBT?", a: "120 hours", w: ["72 hours", "48 hours", "24 hours"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.1.6", g: "fpl", q: "Latest a flight plan may be filed before EOBT for a flight between Peninsular Malaysia and Sabah/Sarawak?", a: "180 minutes", w: ["120 minutes", "60 minutes", "30 minutes"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.2.1", g: "fpl", q: "A controlled flight on your ground frequency is delayed. From what delay must its flight plan be amended or a new one filed?", a: "30 minutes or more after EOBT", w: ["15 minutes or more after EOBT", "45 minutes or more after EOBT", "60 minutes or more after EOBT"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.2.1", g: "fpl", q: "From what delay must an uncontrolled flight's flight plan be amended or a new one filed?", a: "1 hour or more after EOBT", w: ["30 minutes or more after EOBT", "45 minutes or more after EOBT", "2 hours or more after EOBT"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.2.2", g: "fpl", q: "A delayed flight's plan was never amended or refiled. What happens to it?", a: "It is cancelled automatically.", w: ["It stays valid for 24 hours.", "It is suspended until the pilot calls ATC.", "ATC amends it on the operator's behalf."] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.1.8", g: "fpl", q: "Which of these flights is exempt from the 180-minute flight plan filing rule?", a: "A MEDEVAC flight", w: ["A scheduled domestic passenger flight", "A flying school training flight", "An empty positioning (ferry) flight"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.2.1", g: "sar", q: "Who plans and coordinates aeronautical SAR for aircraft in the KL and KK FIRs?", a: "CAAM", w: ["RMAF", "MMEA", "NADMA"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.1.4", g: "sar", q: "Where is the Kota Kinabalu ARCC?", a: "ATCC Building, Jalan Kepayan, Kota Kinabalu", w: ["Kota Kinabalu International Airport terminal", "Labuan Airport", "Kuching International Airport"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.1.4", g: "sar", q: "Which ARSCs serve the KK FIR (besides Kota Samarahan, which is activated when needed)?", a: "Kuching, Miri and Tawau", w: ["Kuching, Sibu and Sandakan", "Labuan, Miri and Tawau", "Kuching, Bintulu and Lahad Datu"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.1.4", g: "sar", q: "Which unit activates the Kota Samarahan ARSC?", a: "Kuching ARSC", w: ["Kota Kinabalu ARCC", "Miri ARSC", "RMAF Labuan"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.2.1", g: "sar", q: "Within what distance of an aerodrome is SAR handled under the Airport Emergency Plan instead of CAAM A-SAR coordination?", a: "5 NM (8 km)", w: ["3 NM (5 km)", "10 NM (18 km)", "15 NM (28 km)"] },
+  { part: "GEN", v: 1, ref: "GEN 3.6.6.2", g: "sar", q: "Which KK FIR ATC unit watches 243.000 MHz during aerodrome operating hours?", a: "Labuan", w: ["Kota Kinabalu", "Miri", "Kuching"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.12", g: "rwy", q: "Kota Kinabalu (WBKK): RWY 02/20 length and width?", a: "3780 m x 45 m", w: ["3500 m x 45 m", "3780 m x 60 m", "3200 m x 45 m"] },
 ];
 
 // ----- APP -----
@@ -467,7 +492,10 @@ const TERMS = {
   AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
   GNSS: "Global Navigation Satellite System", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
   PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
-  TA: "Terminal Area", TMA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle"
+  TA: "Terminal Area", TMA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle",
+  AIRPROX: "Aircraft proximity (a reported loss of safe separation)", ARCC: "Aeronautical Rescue Coordination Centre", ARSC: "Aeronautical Rescue Sub-Centre",
+  EOBT: "Estimated Off-Block Time", MEDEVAC: "Medical evacuation", MMEA: "Malaysian Maritime Enforcement Agency", MOR: "Mandatory Occurrence Report",
+  NADMA: "National Disaster Management Agency", RMAF: "Royal Malaysian Air Force", CAReS: "CAAM Aviation Safety Reporting System"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
 const termsIn = text => [...new Set(plain(text).match(TERM_RE) || [])];

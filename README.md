@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.11.0 (30 Oct 2026): 24 new cards from the controller's side (interception, incident reporting, flight plans, search and rescue, WBKK runway).
 - 1.10.0 (30 Oct 2026): Add-to-home-screen tip (banner on phones + How To steps), app icon and name "AIP Flash Cards".
 - 1.9.3 (30 Oct 2026): A new study session counts only after 30 minutes without revealing a card.
 - 1.9.2 (30 Oct 2026): App counter now uses Abacus (counts every session, updates instantly); GoatCounter kept for the dashboard.
