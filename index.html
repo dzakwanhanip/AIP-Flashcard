@@ -104,6 +104,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-sp
 .btn:disabled { opacity: .4; cursor: default; }
 .nav { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
 .btn.step { color: var(--accent); border-color: var(--accent); font-size: 1rem; padding: 8px; }
+.learned { color: var(--good); font-weight: 600; }
 .pos { color: var(--muted); font-size: .9rem; text-align: center; min-width: 6.5em; }
 .tools { display: flex; gap: 16px; flex-wrap: wrap; font-size: .9rem; }
 .link { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
@@ -233,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.1</span>
   </footer>
 </div>
 
@@ -540,7 +541,7 @@ let mode = saved.mode === "quiz" ? "quiz" : "study";
 let best = saved.best || {};
 // Per-deck pile of question ids not yet asked; a quiz deals from it so nothing repeats until every question has been used.
 let piles = saved.piles || {};
-let queue = [], pos = 0, current = null, flipped = false;
+let queue = [], pos = 0, ahead = 0, current = null, flipped = false;
 let quiz = null;
 const QUIZ_LEN = 10;
 
@@ -682,10 +683,18 @@ function showMode() {
 function buildQueue(shuffle) {
   queue = CARDS.filter(c => (deck === "All" || c.part === deck) && !known.has(id(c)));
   if (shuffle) for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
-  pos = 0; next();
+  pos = 0; ahead = 0; next();
 }
-function next() { if (pos >= queue.length) pos = 0; current = queue[pos] || null; flipped = false; flag.open = false; render(); }
-function step(d) { if (queue.length > 1) { pos = (pos + d + queue.length) % queue.length; next(); } }
+// The study pile keeps every card in the order it was shown, so Back always returns to the card just seen
+// (including one marked Got it). Moving forward past cards already seen skips any that are now learned.
+function next() { current = queue[pos] || null; flipped = false; flag.open = false; render(); }
+function forward() {
+  let p = pos + 1;
+  while (p < queue.length && p > ahead && known.has(id(queue[p]))) p++;
+  if (p >= queue.length) { buildQueue(true); return; }   // end of the pile: start a new round with the cards not yet learned
+  pos = p; ahead = Math.max(ahead, p); next();
+}
+function step(d) { if (d < 0) { if (pos > 0) { pos--; next(); } } else forward(); }
 
 function render() {
   const inDeck = CARDS.filter(c => deck === "All" || c.part === deck);
@@ -707,10 +716,11 @@ function render() {
   again.disabled = good.disabled = !flipped;
   document.getElementById("nav").hidden = mode === "quiz";
   document.getElementById("pos").textContent = "Card " + (pos + 1) + " of " + queue.length;
-  document.getElementById("prevBtn").disabled = document.getElementById("fwdBtn").disabled = queue.length < 2;
+  document.getElementById("prevBtn").disabled = pos === 0;
+  document.getElementById("fwdBtn").disabled = queue.length < 2 && known.has(id(current));
   area.innerHTML = `<div class="card" id="card" tabindex="0" role="button" aria-label="Flash card. Tap to flip.">
     <div class="bar"></div><div class="content">
-      <div class="meta"><span>${current.part}</span><span class="ref">${current.ref}</span></div>
+      <div class="meta"><span>${current.part}${known.has(id(current)) ? ` · <span class="learned">Learned ✓</span>` : ""}</span><span class="ref">${current.ref}</span></div>
       <div class="side">${flipped ? "Answer" : "Question"}</div>
       <p class="q">${current.q}</p>${questionTerms(current)}
       ${flipped ? `<div class="reveal${revealing ? " wipe" : ""}"><p class="a">${current.a}</p><div class="verify">${sourceNote(current)}</div>${flagBlock(current)}</div>`
@@ -727,10 +737,9 @@ function flip() {
 }
 function answer(gotIt) {
   if (!current || !flipped) return;
-  queue.splice(pos, 1);
-  if (gotIt) known.add(id(current)); else queue.push(current);
-  if (queue[pos] === current && queue.length > 1) pos = 0;
-  save(); next();
+  if (gotIt) known.add(id(current));
+  else { known.delete(id(current)); queue.push(current); }   // Again: see it once more at the back of the pile
+  save(); forward();
 }
 
 document.addEventListener("click", e => {
