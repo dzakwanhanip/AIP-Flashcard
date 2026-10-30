@@ -234,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.1</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.2</span>
   </footer>
 </div>
 
@@ -406,9 +406,6 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 1.12.2.1", g: "intercept", q: "An intercepted aircraft gets no answer on 121.5 MHz. Which frequency should it repeat the call on, if practicable?", a: "123.45 MHz", w: ["123.1 MHz", "122.8 MHz", "121.9 MHz"] },
   { part: "ENR", v: 1, ref: "ENR 1.12.2.2", g: "intercept", q: "Your radio instructions conflict with the visual signals from the intercepting aircraft. What should the intercepted pilot do?", a: "Ask for immediate clarification and keep following the visual signals.", w: ["Follow ATC's instructions until it is clarified.", "Hold present position until it is clarified.", "Follow whichever instruction came first."] },
   { part: "ENR", v: 1, ref: "ENR 1.12.2.3", g: "intercept", q: "Your radio instructions conflict with the intercepting aircraft's radio instructions. What should the intercepted pilot do?", a: "Ask for immediate clarification and keep following the intercepting aircraft's radio instructions.", w: ["Follow ATC's radio instructions until it is clarified.", "Select code 7600 and continue on the cleared route.", "Stop following any instructions until it is clarified."] },
-  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepting aircraft makes an abrupt climbing break-away turn of 90° or more. Meaning?", a: "You may proceed.", w: ["Follow me.", "Land at this aerodrome.", "Descend now."] },
-  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepted aircraft flashes all available lights irregularly. Meaning?", a: "In distress.", w: ["Cannot comply.", "The designated aerodrome is inadequate.", "Understood, will comply."] },
-  { part: "ENR", v: 1, ref: "ENR 1.12.4.1", g: "signal", q: "Interception signal: the intercepted aircraft switches all available lights on and off at regular intervals. Meaning?", a: "Cannot comply.", w: ["In distress.", "The designated aerodrome is inadequate.", "Position unknown."] },
   { part: "ENR", v: 1, ref: "ENR 1.14.2.2", g: "report", q: "After an AIRPROX on your sector, where does the pilot submit the incident report?", a: "CAReS, the CAAM Aviation Safety Reporting System online portal", w: ["The paper incident form at the ATCC", "By email to the CAAM Director General", "The e-FPL portal"] },
   { part: "ENR", v: 1, ref: "ENR 1.14.3.3", g: "report", q: "Deadline to submit a Mandatory Occurrence Report (MOR) through CAReS?", a: "Within 48 hours of the occurrence", w: ["Within 24 hours of the occurrence", "Within 72 hours of the occurrence", "Within 7 days of the occurrence"] },
   { part: "ENR", v: 1, ref: "ENR 1.14.3.3", g: "report", q: "Deadline to submit other incident reports (not MORs) through CAReS?", a: "Within 30 days of the occurrence", w: ["Within 14 days of the occurrence", "Within 7 days of the occurrence", "Within 60 days of the occurrence"] },
