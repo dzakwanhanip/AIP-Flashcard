@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.9.1 (30 Oct 2026): How To close button says "Copied".
 - 1.9.0 (30 Oct 2026): How To covers the quiz too, ATC-style wording; perfect-score celebration.
 - 1.8.0 (30 Oct 2026): "How To" briefing for Study mode.
 - 1.7.1 (29 Oct 2026): Study mode: answer now reveals from top to bottom instead of the card flipping.
