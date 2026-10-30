@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.12.0 (30 Oct 2026): 17 Kota Kinabalu cards from WBKK AD 2.17 to 2.19 (CTR, frequencies, ILS, VOR/DME).
 - 1.11.0 (30 Oct 2026): 24 new cards from the controller's side (interception, incident reporting, flight plans, search and rescue, WBKK runway).
 - 1.10.0 (30 Oct 2026): Add-to-home-screen tip (banner on phones + How To steps), app icon and name "AIP Flash Cards".
 - 1.9.3 (30 Oct 2026): A new study session counts only after 30 minutes without revealing a card.

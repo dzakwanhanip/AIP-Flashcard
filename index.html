@@ -233,7 +233,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.11.0</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.0</span>
   </footer>
 </div>
 
@@ -424,6 +424,24 @@ const CARDS = [
   { part: "GEN", v: 1, ref: "GEN 3.6.2.1", g: "sar", q: "Within what distance of an aerodrome is SAR handled under the Airport Emergency Plan instead of CAAM A-SAR coordination?", a: "5 NM (8 km)", w: ["3 NM (5 km)", "10 NM (18 km)", "15 NM (28 km)"] },
   { part: "GEN", v: 1, ref: "GEN 3.6.6.2", g: "sar", q: "Which KK FIR ATC unit watches 243.000 MHz during aerodrome operating hours?", a: "Labuan", w: ["Kota Kinabalu", "Miri", "Kuching"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.12", g: "rwy", q: "Kota Kinabalu (WBKK): RWY 02/20 length and width?", a: "3780 m x 45 m", w: ["3500 m x 45 m", "3780 m x 60 m", "3200 m x 45 m"] },
+  // ----- Added 30 OCT 2026 from Dzakwan's screenshot of WBKK AD 2.17 to 2.19 -----
+  { part: "AD", v: 1, ref: "WBKK AD 2.17", g: "wbkk-ctr", q: "Kota Kinabalu (WBKK): Kota Kinabalu CTR lateral limits?", a: "Circle of 20 NM radius centred on the VJN DVOR/DME", w: ["Circle of 25 NM radius centred on the VJN DVOR/DME", "Circle of 20 NM radius centred on the aerodrome reference point", "Circle of 15 NM radius centred on the VJN DVOR/DME"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.17", g: "wbkk-ctr", q: "Kota Kinabalu (WBKK): Kota Kinabalu CTR vertical limits?", a: "SFC to 3 000 ft AMSL", w: ["SFC to 2 500 ft AMSL", "SFC to 5 000 ft AMSL", "SFC to 1 500 ft AMSL"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.17", g: "wbkk-ctr", q: "Kota Kinabalu (WBKK): Kota Kinabalu CTR airspace class?", a: "Class C", w: ["Class D", "Class B", "Class A"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Ground frequency?", a: "121.600 MHz", w: ["121.900 MHz", "121.700 MHz", "121.800 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Tower frequency?", a: "118.300 MHz", w: ["118.100 MHz", "118.700 MHz", "118.200 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radar frequency for aerodrome approach (AD APP)?", a: "119.100 MHz", w: ["119.300 MHz", "120.100 MHz", "118.300 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Terminal Information (ATIS) frequency?", a: "127.400 MHz", w: ["127.200 MHz", "126.400 MHz", "128.400 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radar (ACC, TMA and airways) primary frequencies?", a: "126.100, 128.300 and 132.450 MHz", w: ["126.100, 128.750 and 132.450 MHz", "125.950, 128.300 and 132.450 MHz", "126.100, 128.300 and 133.300 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Information (FIC) frequency and hours?", a: "133.300 MHz, sunrise to sunset", w: ["133.300 MHz, 24 hours", "132.300 MHz, sunrise to sunset", "133.500 MHz, 24 hours"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radio (A/G) HF frequency?", a: "6825 kHz", w: ["6852 kHz", "8825 kHz", "5625 kHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-unit", q: "Kota Kinabalu (WBKK): an IFR departure is airborne. Unless instructed otherwise, who must it contact?", a: "Kinabalu Radar", w: ["Kinabalu Tower", "Kinabalu Information", "Kinabalu Radio"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-unit", q: "Kota Kinabalu (WBKK): which unit do aircraft call for start-up?", a: "Kinabalu Ground", w: ["Kinabalu Tower", "Kinabalu Delivery", "Kinabalu Radar"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): RWY 02 ILS identifier and LOC frequency?", a: "IKKP, 108.100 MHz", w: ["IKKD, 108.100 MHz", "IKKP, 111.100 MHz", "IKKP, 109.100 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): RWY 20 ILS identifier and LOC frequency?", a: "IKKD, 111.100 MHz", w: ["IKKP, 111.100 MHz", "IKKD, 108.100 MHz", "IKKD, 110.100 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): ILS glide path angle for RWY 02 and RWY 20?", a: "3\u00b0", w: ["2.5°", "3.5°", "3.2°"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): VOR/DME identifier and frequency?", a: "VJN, 113.100 MHz", w: ["VKK, 113.100 MHz", "VJN, 113.300 MHz", "VJN, 116.100 MHz"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): published coverage of the VJN VOR/DME?", a: "200 NM", w: ["150 NM", "100 NM", "250 NM"] },
 ];
 
 // ----- APP -----
@@ -495,7 +513,7 @@ const TERMS = {
   TA: "Terminal Area", TMA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle",
   AIRPROX: "Aircraft proximity (a reported loss of safe separation)", ARCC: "Aeronautical Rescue Coordination Centre", ARSC: "Aeronautical Rescue Sub-Centre",
   EOBT: "Estimated Off-Block Time", MEDEVAC: "Medical evacuation", MMEA: "Malaysian Maritime Enforcement Agency", MOR: "Mandatory Occurrence Report",
-  NADMA: "National Disaster Management Agency", RMAF: "Royal Malaysian Air Force", CAReS: "CAAM Aviation Safety Reporting System"
+  NADMA: "National Disaster Management Agency", RMAF: "Royal Malaysian Air Force", CAReS: "CAAM Aviation Safety Reporting System", DVOR: "Doppler VOR"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
 const termsIn = text => [...new Set(plain(text).match(TERM_RE) || [])];
