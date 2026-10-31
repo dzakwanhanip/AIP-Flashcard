@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.13.0 (31 Oct 2026): 9 Tawau (WBKW) cards (callsigns, frequencies, CTR); Kinabalu Information labelled FIS.
 - 1.12.2 (30 Oct 2026): Removed the three interception signal cards.
 - 1.12.1 (30 Oct 2026): Fix: Back now returns to the card just seen, including one marked Got it.
 - 1.12.0 (30 Oct 2026): 17 Kota Kinabalu cards from WBKK AD 2.17 to 2.19 (CTR, frequencies, ILS, VOR/DME).

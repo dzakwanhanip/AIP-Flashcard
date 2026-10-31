@@ -234,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.12.2</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.13.0</span>
   </footer>
 </div>
 
@@ -431,7 +431,7 @@ const CARDS = [
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radar frequency for aerodrome approach (AD APP)?", a: "119.100 MHz", w: ["119.300 MHz", "120.100 MHz", "118.300 MHz"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Terminal Information (ATIS) frequency?", a: "127.400 MHz", w: ["127.200 MHz", "126.400 MHz", "128.400 MHz"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radar (ACC, TMA and airways) primary frequencies?", a: "126.100, 128.300 and 132.450 MHz", w: ["126.100, 128.750 and 132.450 MHz", "125.950, 128.300 and 132.450 MHz", "126.100, 128.300 and 133.300 MHz"] },
-  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Information (FIC) frequency and hours?", a: "133.300 MHz, sunrise to sunset", w: ["133.300 MHz, 24 hours", "132.300 MHz, sunrise to sunset", "133.500 MHz, 24 hours"] },
+  { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Information (FIS) frequency and hours?", a: "133.300 MHz, sunrise to sunset", w: ["133.300 MHz, 24 hours", "132.300 MHz, sunrise to sunset", "133.500 MHz, 24 hours"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-freq", q: "Kota Kinabalu (WBKK): Kinabalu Radio (A/G) HF frequency?", a: "6825 kHz", w: ["6852 kHz", "8825 kHz", "5625 kHz"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-unit", q: "Kota Kinabalu (WBKK): an IFR departure is airborne. Unless instructed otherwise, who must it contact?", a: "Kinabalu Radar", w: ["Kinabalu Tower", "Kinabalu Information", "Kinabalu Radio"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.18", g: "wbkk-unit", q: "Kota Kinabalu (WBKK): which unit do aircraft call for start-up?", a: "Kinabalu Ground", w: ["Kinabalu Tower", "Kinabalu Delivery", "Kinabalu Radar"] },
@@ -440,6 +440,16 @@ const CARDS = [
   { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): ILS glide path angle for RWY 02 and RWY 20?", a: "3\u00b0", w: ["2.5°", "3.5°", "3.2°"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): VOR/DME identifier and frequency?", a: "VJN, 113.100 MHz", w: ["VKK, 113.100 MHz", "VJN, 113.300 MHz", "VJN, 116.100 MHz"] },
   { part: "AD", v: 1, ref: "WBKK AD 2.19", g: "wbkk-nav", q: "Kota Kinabalu (WBKK): published coverage of the VJN VOR/DME?", a: "200 NM", w: ["150 NM", "100 NM", "250 NM"] },
+  // ----- Added 31 OCT 2026 from AIRAC AIP AMDT 04/26, WBKW AD 2.17 and 2.18 -----
+  { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-unit", q: "Tawau (WBKW): on 122.500 MHz giving approach procedural (non-radar) service, what is your callsign?", a: "Tawau Tower", w: ["Tawau Approach", "Tawau Radar", "Tawau Information"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-unit", q: "Tawau (WBKW): what is your callsign while giving approach radar service?", a: "Tawau Radar", w: ["Tawau Approach", "Tawau Tower", "Tawau Director"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-unit", q: "Tawau (WBKW): outside radar hours, which unit provides air traffic services?", a: "Tawau Tower", w: ["Kinabalu Radar", "Tawau Radar", "Kinabalu Information"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-freq", q: "Tawau (WBKW): Tawau Radar frequency and hours?", a: "123.550 MHz, 0100–1000 UTC", w: ["123.550 MHz, 2300–1400 UTC", "123.500 MHz, 0100–1000 UTC", "125.550 MHz, 0100–1000 UTC"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-freq", q: "Tawau (WBKW): Tawau Tower frequency?", a: "122.500 MHz", w: ["122.300 MHz", "118.500 MHz", "122.700 MHz"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-freq", q: "Tawau (WBKW): Tawau Ground frequency?", a: "121.900 MHz", w: ["121.600 MHz", "121.700 MHz", "121.800 MHz"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-freq", q: "Tawau (WBKW): Tawau Terminal Information (ATIS) frequency?", a: "126.250 MHz", w: ["126.450 MHz", "127.250 MHz", "126.200 MHz"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-ctr", q: "Tawau (WBKW): Tawau CTR vertical limits?", a: "SFC to 11 500 ft AMSL", w: ["SFC to 3 000 ft AMSL", "SFC to 5 500 ft AMSL", "SFC to 11 000 ft AMSL"] },
+  { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-ctr", q: "Tawau (WBKW): Tawau CTR lateral limits are based on an arc of what radius?", a: "40 NM, centred on the VTW DVOR/DME", w: ["20 NM, centred on the VTW DVOR/DME", "30 NM, centred on the VTW DVOR/DME", "40 NM, centred on the aerodrome reference point"] },
 ];
 
 // ----- APP -----
@@ -507,7 +517,7 @@ const TERMS = {
   "ADS-B": "Automatic Dependent Surveillance – Broadcast", "ADS-C": "Automatic Dependent Surveillance – Contract",
   AR: "Authorisation Required", ATZ: "Aerodrome Traffic Zone", CPDLC: "Controller–Pilot Data Link Communications", EAT: "Expected Approach Time",
   GNSS: "Global Navigation Satellite System", IAF: "Initial Approach Fix", IF: "Intermediate Fix", OCA: "Obstacle Clearance Altitude", OCH: "Obstacle Clearance Height",
-  PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
+  PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", FIS: "Flight Information Service", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
   TA: "Terminal Area", TMA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle",
   AIRPROX: "Aircraft proximity (a reported loss of safe separation)", ARCC: "Aeronautical Rescue Coordination Centre", ARSC: "Aeronautical Rescue Sub-Centre",
   EOBT: "Estimated Off-Block Time", MEDEVAC: "Medical evacuation", MMEA: "Malaysian Maritime Enforcement Agency", MOR: "Mandatory Occurrence Report",
