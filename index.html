@@ -234,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.13.1</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.14.0</span>
   </footer>
 </div>
 
@@ -450,6 +450,12 @@ const CARDS = [
   { part: "AD", v: 1, ref: "WBKW AD 2.18", g: "wbkw-freq", q: "Tawau (WBKW): Tawau Terminal Information (ATIS) frequency?", a: "126.250 MHz", w: ["126.450 MHz", "127.250 MHz", "126.200 MHz"] },
   { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-ctr", q: "Tawau (WBKW): Tawau CTR vertical limits?", a: "SFC to 11 500 ft AMSL", w: ["SFC to 3 000 ft AMSL", "SFC to 5 500 ft AMSL", "SFC to 11 000 ft AMSL"] },
   { part: "AD", v: 1, ref: "WBKW AD 2.17", g: "wbkw-ctr", q: "Tawau (WBKW): Tawau CTR lateral limits are based on an arc of what radius?", a: "40 NM, centred on the VTW DVOR/DME", w: ["20 NM, centred on the VTW DVOR/DME", "30 NM, centred on the VTW DVOR/DME", "40 NM, centred on the aerodrome reference point"] },
+  // ----- Added 31 OCT 2026 from AIRAC AIP AMDT 04/26, ENR 3.3 M772 route remarks -----
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from which two Indonesian airports may use it?", a: "WIII (Jakarta Soekarno-Hatta) and WIHH (Jakarta Halim)", w: ["WIII (Jakarta Soekarno-Hatta) and WIMM (Medan Kualanamu)", "WIHH (Jakarta Halim) and WADD (Bali)", "WIII (Jakarta Soekarno-Hatta) and WICC (Bandung)"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: WIII and WIHH departures may use it to which destinations?", a: "VHHH and airports in the People's Republic of China", w: ["VHHH only", "Airports in the People's Republic of China only", "VHHH, RCTP and airports in the People's Republic of China"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from WBGB, WBSB, WBGG, WBKL, WBGR and WBGS may use it to which destination?", a: "VHHH only", w: ["VHHH and airports in the People's Republic of China", "Any airport in the People's Republic of China", "VHHH and RPLL"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: which of these departures may file it to VHHH?", a: "WBGR (Miri)", w: ["WBKK (Kota Kinabalu)", "WBKW (Tawau)", "WBKS (Sandakan)"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: a Kota Kinabalu (WBKK) departure to VHHH files via M772. Is that allowed?", a: "No. Only WBGB, WBSB, WBGG, WBKL, WBGR and WBGS departures may use it, to VHHH only.", w: ["Yes. Any KK FIR departure may use it to VHHH.", "Yes, with Kota Kinabalu ACC approval.", "No. M772 is for WIII and WIHH departures only."] },
 ];
 
 // ----- APP -----
