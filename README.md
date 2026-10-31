@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.14.3 (31 Oct 2026): M772 cards reverted to the original five, pending review.
 - 1.14.2 (31 Oct 2026): M772 cards reworded around the departure-to-destination conditions.
 - 1.14.1 (31 Oct 2026): Removed the WBKK M772 card.
 - 1.14.0 (31 Oct 2026): 5 M772 route availability cards (ENR 3.3).
