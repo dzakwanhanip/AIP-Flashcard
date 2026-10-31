@@ -234,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.14.3</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.14.4</span>
   </footer>
 </div>
 
@@ -414,7 +414,7 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 1.10.2.1", g: "fpl", q: "A controlled flight on your ground frequency is delayed. From what delay must its flight plan be amended or a new one filed?", a: "30 minutes or more after EOBT", w: ["15 minutes or more after EOBT", "45 minutes or more after EOBT", "60 minutes or more after EOBT"] },
   { part: "ENR", v: 1, ref: "ENR 1.10.2.1", g: "fpl", q: "From what delay must an uncontrolled flight's flight plan be amended or a new one filed?", a: "1 hour or more after EOBT", w: ["30 minutes or more after EOBT", "45 minutes or more after EOBT", "2 hours or more after EOBT"] },
   { part: "ENR", v: 1, ref: "ENR 1.10.2.2", g: "fpl", q: "A delayed flight's plan was never amended or refiled. What happens to it?", a: "It is cancelled automatically.", w: ["It stays valid for 24 hours.", "It is suspended until the pilot calls ATC.", "ATC amends it on the operator's behalf."] },
-  { part: "ENR", v: 1, ref: "ENR 1.10.1.8", g: "fpl", q: "Which of these flights is exempt from the 180-minute flight plan filing rule?", a: "A MEDEVAC flight", w: ["A scheduled domestic passenger flight", "A flying school training flight", "An empty positioning (ferry) flight"] },
+  { part: "ENR", v: 1, ref: "ENR 1.10.1.8", g: "fpl", q: "Which flights are exempt from the 180-minute flight plan filing rule?", a: "SAR, firefighting, medical (including MEDEVAC), humanitarian, Head of State, MARSA and State flights", w: ["SAR, firefighting, medical (including MEDEVAC), humanitarian, training and State flights", "SAR, medical (including MEDEVAC), humanitarian, Head of State, positioning and State flights", "SAR, firefighting, medical (including MEDEVAC), Head of State and scheduled domestic flights"] },
   { part: "GEN", v: 1, ref: "GEN 3.6.2.1", g: "sar", q: "Who plans and coordinates aeronautical SAR for aircraft in the KL and KK FIRs?", a: "CAAM", w: ["RMAF", "MMEA", "NADMA"] },
   { part: "GEN", v: 1, ref: "GEN 3.6.1.4", g: "sar", q: "Where is the Kota Kinabalu ARCC?", a: "ATCC Building, Jalan Kepayan, Kota Kinabalu", w: ["Kota Kinabalu International Airport terminal", "Labuan Airport", "Kuching International Airport"] },
   { part: "GEN", v: 1, ref: "GEN 3.6.1.4", g: "sar", q: "Which ARSCs serve the KK FIR (besides Kota Samarahan, which is activated when needed)?", a: "Kuching, Miri and Tawau", w: ["Kuching, Sibu and Sandakan", "Labuan, Miri and Tawau", "Kuching, Bintulu and Lahad Datu"] },
@@ -454,7 +454,7 @@ const CARDS = [
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from which two Indonesian airports may use it?", a: "WIII (Jakarta Soekarno-Hatta) and WIHH (Jakarta Halim)", w: ["WIII (Jakarta Soekarno-Hatta) and WIMM (Medan Kualanamu)", "WIHH (Jakarta Halim) and WADD (Bali)", "WIII (Jakarta Soekarno-Hatta) and WICC (Bandung)"] },
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: WIII and WIHH departures may use it to which destinations?", a: "VHHH and airports in the People's Republic of China", w: ["VHHH only", "Airports in the People's Republic of China only", "VHHH, RCTP and airports in the People's Republic of China"] },
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from WBGB, WBSB, WBGG, WBKL, WBGR and WBGS may use it to which destination?", a: "VHHH only", w: ["VHHH and airports in the People's Republic of China", "Any airport in the People's Republic of China", "VHHH and RPLL"] },
-  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: which of these departures may file it to VHHH?", a: "WBGR (Miri)", w: ["WBKK (Kota Kinabalu)", "WBKW (Tawau)", "WBKS (Sandakan)"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: which six departure aerodromes in our area may use it, to VHHH only?", a: "WBGB, WBSB, WBGG, WBKL, WBGR and WBGS", w: ["WBKK, WBSB, WBGG, WBKL, WBGR and WBGS", "WBGB, WBSB, WBGG, WBKW, WBGR and WBGS", "WBGB, WBSB, WBGG, WBKL, WBGR and WBGK"] },
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: a Kota Kinabalu (WBKK) departure to VHHH files via M772. Is that allowed?", a: "No. Only WBGB, WBSB, WBGG, WBKL, WBGR and WBGS departures may use it, to VHHH only.", w: ["Yes. Any KK FIR departure may use it to VHHH.", "Yes, with Kota Kinabalu ACC approval.", "No. M772 is for WIII and WIHH departures only."] },
 ];
 
@@ -526,7 +526,7 @@ const TERMS = {
   PBN: "Performance-Based Navigation", PPR: "Prior Permission Required", ATCC: "Air Traffic Control Centre", FIC: "Flight Information Centre", FIS: "Flight Information Service", RDH: "Reference Datum Height", RF: "Radius to Fix (a curved path)", RNP: "Required Navigation Performance",
   TA: "Terminal Area", TMA: "Terminal Control Area", THR: "Threshold (start of the usable landing part of the runway)", VPA: "Vertical Path Angle",
   AIRPROX: "Aircraft proximity (a reported loss of safe separation)", ARCC: "Aeronautical Rescue Coordination Centre", ARSC: "Aeronautical Rescue Sub-Centre",
-  EOBT: "Estimated Off-Block Time", MEDEVAC: "Medical evacuation", MMEA: "Malaysian Maritime Enforcement Agency", MOR: "Mandatory Occurrence Report",
+  EOBT: "Estimated Off-Block Time", MEDEVAC: "Medical evacuation", MMEA: "Malaysian Maritime Enforcement Agency", MOR: "Mandatory Occurrence Report", MARSA: "Military Assumes Responsibility for Separation of Aircraft",
   NADMA: "National Disaster Management Agency", RMAF: "Royal Malaysian Air Force", CAReS: "CAAM Aviation Safety Reporting System", DVOR: "Doppler VOR"
 };
 const TERM_RE = new RegExp("(?<![A-Za-z-])(" + Object.keys(TERMS).sort((a, b) => b.length - a.length).map(k => k.replace("-", "\\-")).join("|") + ")(?![A-Z-])", "g");
