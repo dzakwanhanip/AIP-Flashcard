@@ -41,6 +41,7 @@ The version at the bottom of the app is written as MAJOR.MINOR.PATCH, for exampl
 
 History:
 
+- 1.14.5 (31 Oct 2026): Clearer wording on the M772 departure aerodromes card.
 - 1.14.4 (31 Oct 2026): Reworded two "which of these" cards so they work as flash cards (no options shown in Study mode).
 - 1.14.3 (31 Oct 2026): M772 cards reverted to the original five, pending review.
 - 1.14.2 (31 Oct 2026): M772 cards reworded around the departure-to-destination conditions.
