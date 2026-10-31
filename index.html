@@ -234,7 +234,7 @@ footer { color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line
   </div>
 
   <footer>
-    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.14.5</span>
+    ENR cards are based on AIRAC AIP AMDT 04/26 (effective 29 OCT 2026). GEN 3.6 (search and rescue) cards are checked; the other GEN cards and the four airport code cards are unchecked samples. Always refer to the current Malaysian AIP at aip.caam.gov.my. Study aid only, not for operational use. <span class="ver">Version 1.15.0</span>
   </footer>
 </div>
 
@@ -453,8 +453,8 @@ const CARDS = [
   // ----- Added 31 OCT 2026 from AIRAC AIP AMDT 04/26, ENR 3.3 M772 route remarks -----
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from which two Indonesian airports may use it?", a: "WIII (Jakarta Soekarno-Hatta) and WIHH (Jakarta Halim)", w: ["WIII (Jakarta Soekarno-Hatta) and WIMM (Medan Kualanamu)", "WIHH (Jakarta Halim) and WADD (Bali)", "WIII (Jakarta Soekarno-Hatta) and WICC (Bandung)"] },
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: WIII and WIHH departures may use it to which destinations?", a: "VHHH and airports in the People's Republic of China", w: ["VHHH only", "Airports in the People's Republic of China only", "VHHH, RCTP and airports in the People's Republic of China"] },
-  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: departures from WBGB, WBSB, WBGG, WBKL, WBGR and WBGS may use it to which destination?", a: "VHHH only", w: ["VHHH and airports in the People's Republic of China", "Any airport in the People's Republic of China", "VHHH and RPLL"] },
-  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: besides WIII and WIHH, which six departure aerodromes may use it (to VHHH only)?", a: "WBGB, WBSB, WBGG, WBKL, WBGR and WBGS", w: ["WBKK, WBSB, WBGG, WBKL, WBGR and WBGS", "WBGB, WBSB, WBGG, WBKW, WBGR and WBGS", "WBGB, WBSB, WBGG, WBKL, WBGR and WBGK"] },
+  { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: which departure aerodromes in the Kota Kinabalu FIR may use it, and to which destination aerodrome?", a: "Bintulu (WBGB), Brunei (WBSB), Kuching (WBGG), Labuan (WBKL), Miri (WBGR) and Sibu (WBGS), to Hong Kong (VHHH) only.", w: ["Bintulu (WBGB), Brunei (WBSB), Kuching (WBGG), Labuan (WBKL), Miri (WBGR) and Sibu (WBGS), to Hong Kong (VHHH) and airports in the People's Republic of China.", "Kota Kinabalu (WBKK), Brunei (WBSB), Kuching (WBGG), Labuan (WBKL), Miri (WBGR) and Sibu (WBGS), to Hong Kong (VHHH) only.", "Bintulu (WBGB), Brunei (WBSB), Kuching (WBGG), Tawau (WBKW), Miri (WBGR) and Sibu (WBGS), to Hong Kong (VHHH) only."],
+    quiz: { q: "Which of the following flights may file via M772?<br>i. Kuching (WBGG) to Hong Kong (VHHH)<br>ii. Labuan (WBKL) to Guangzhou (ZGGG)<br>iii. Miri (WBGR) to Hong Kong (VHHH)", a: "i and iii only", opts: ["i and ii only", "i and iii only", "ii and iii only", "All of the above"] } },
   { part: "ENR", v: 1, ref: "ENR 3.3 M772", g: "m772", q: "M772: a Kota Kinabalu (WBKK) departure to VHHH files via M772. Is that allowed?", a: "No. Only WBGB, WBSB, WBGG, WBKL, WBGR and WBGS departures may use it, to VHHH only.", w: ["Yes. Any KK FIR departure may use it to VHHH.", "Yes, with Kota Kinabalu ACC approval.", "No. M772 is for WIII and WIHH departures only."] },
 ];
 
@@ -567,6 +567,7 @@ const shuffled = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 
 // Each question gets two believable wrong options from the card's own list (w),
 // plus one obviously wrong option borrowed from an unrelated card.
 function optionsFor(card) {
+  if (card.fixedOpts) return card.fixedOpts.slice();   // i / ii / iii style: all options, always in the same order
   if (card.w && card.w.length >= 2) {
     const close = shuffled(card.w).slice(0, 2);
     const odd = shuffled(CARDS.filter(c => c !== card && (!card.g || c.g !== card.g)))
@@ -591,7 +592,9 @@ function startQuiz() {
     picked.push(pile.shift());
   }
   piles[deck] = pile; save();
-  const inDeck = picked.map(k => byId.get(k));
+  // A card may carry its own quiz wording (card.quiz), e.g. an "i, ii, iii" question with fixed options.
+  const asQuiz = c => c.quiz ? { ...c, q: c.quiz.q, a: c.quiz.a, w: c.quiz.opts.filter(o => o !== c.quiz.a), fixedOpts: c.quiz.opts } : c;
+  const inDeck = picked.map(k => asQuiz(byId.get(k)));
   quiz = { cards: inDeck, i: 0, score: 0, picked: null, opts: optionsFor(inDeck[0]), left: pile.length, total: all.length };
   renderQuiz();
 }
